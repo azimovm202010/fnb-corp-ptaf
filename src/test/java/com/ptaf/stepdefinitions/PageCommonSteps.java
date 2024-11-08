@@ -18,7 +18,7 @@ public class PageCommonSteps {
     @Given("^we navigate to (.*?) url$")
     public void weNavigateToURL(String URL) {
         page.navigate(ConfigurationProperties.getBaseUrl(URL));
-        page.setViewportSize(1920, 1080);
+//        page.setViewportSize(1920, 1080);
     }
 
     @Then("^we click on page (.*?) locator (.*?)$")

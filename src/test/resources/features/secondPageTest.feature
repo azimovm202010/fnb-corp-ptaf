@@ -48,6 +48,6 @@ Feature: Second Page Test
     Then we click on page personal locator new_customer_check
     When we click on page personal locator continue_btn
     Then we click on new page personal locator continue_btn_window
-    And we click on new page personal locator view_and_accept
+    And we click on new page personal locator view_and_accep
     When we click on new page personal locator canvas
 #    Then we press on new page personal locator body key "End" keyboard
