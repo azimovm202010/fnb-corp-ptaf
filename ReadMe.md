@@ -50,8 +50,6 @@ FNB-PTAF/
 │       ├── java/
 │       │   ├── com/
 │       │   │   └── ptaf/
-│       │   │       ├── hooks/               # Hooks for pre- and post-test actions
-│       │   │       ├── pages/               # Page objects and utility methods
 │       │   │       ├── runners/             # Test runners (TestNG/JUnit)
 │       │   │       └── stepdefinitions/     # Cucumber step definitions
 │       │   └── resources/
@@ -66,67 +64,266 @@ FNB-PTAF/
 
 ---
 
-### Directory Breakdown
+## Key Features
 
-#### 1. `src/test/java/com/ptaf/hooks/`
-This directory contains the **Hooks** used in Cucumber to set up and tear down the test environment. Hooks are used to define actions that need to be performed before or after each scenario, such as:
-- Initializing the browser using Playwright.
-- Taking screenshots when a scenario fails.
-- Closing the browser after the test completes.
+### 1. Action Performer
 
-**Key File:**
-- **`Hooks.java`**:
-    - Defines the `@Before` hook that sets up the browser before each test starts.
-    - Defines the `@After` hook that takes a screenshot if a test fails and closes the browser after the test finishes.
+**Description**: The Action Performer class encapsulates various methods for interacting with UI elements on a web page. This includes basic actions such as clicking, filling in forms, and advanced interactions like drag-and-drop.
 
-#### 2. `src/test/java/com/ptaf/pages/`
-The **Pages** directory contains utility classes that abstract common actions and assertions. These classes provide reusable methods that make it easier to interact with web elements and assert conditions, such as checking if an element is visible or clicking a button.
+**Example**: Clicking a button on a web page.
 
-**Key Files:**
-- **`CommonMethods.java`**:
-    - Provides methods for performing common actions on the web page, such as clicking buttons, filling out forms, and selecting dropdown options.
-- **`AssertionUtil.java`**:
-    - Contains custom assertion methods for verifying page states, such as checking if an element contains the correct text or if a button is visible.
-- **`ElementHandle.java`**:
-    - Manages specific interactions with Playwright’s `ElementHandle` for more complex or low-level element interactions.
-
-#### 3. `src/test/java/com/ptaf/runners/`
-The **Runners** directory contains the entry point for test execution. These classes are responsible for configuring how the tests are run and which feature files are executed. The framework supports both TestNG and JUnit runners.
-
-**Key Files:**
-- **`ParallelRun.java`**:
-    - A TestNG-based runner that allows tests to be executed in parallel. Parallel execution speeds up test execution by running multiple tests concurrently.
-- **`TestRunner.java`**:
-    - A JUnit-based runner that runs tests sequentially, executing the scenarios defined in the Cucumber feature files.
-
-#### 4. `src/test/java/com/ptaf/stepdefinitions/`
-This directory contains the **step definitions**, which link Cucumber steps in the feature files to the corresponding code. Each step in a Gherkin scenario (e.g., "Given the user is on the login page") is implemented in these files.
-
-**Key File:**
-- **`CommonSteps.java`**:
-    - Implements common step definitions for actions like navigating to URLs, filling out forms, clicking buttons, and verifying page content.
-
-#### 5. `src/test/resources/features/`
-The **features** directory contains Cucumber feature files. These files describe the application behavior in Gherkin syntax, which is easy for non-developers to understand.
-
-Example:
-```gherkin
-Feature: User Login
-
-  Scenario: Successful login
-    Given the user navigates to "qa_url"
-    When the user enters "username" in the "login" field
-    And the user enters "password" in the "password" field
-    And the user clicks the "submit" button
-    Then the user should be redirected to the homepage
+```java
+ActionPerformer actionPerformer = new ActionPerformer();
+Locator myLocator = page.locator("button#submit"); // Selecting the button locator
+actionPerformer.performAction("click", myLocator, null); // Performing click action
 ```
 
-#### 6. `src/test/resources/elements/`
-The **elements** directory contains YAML files that define the locators for elements on various pages, as well as environment-specific configurations like URLs. Storing these values in YAML files allows the framework to be more maintainable and flexible.
+### 2. Element Locator Helper
 
-**Key Files:**
-- **`elements.yml`**: Defines locators for various elements on the pages.
-- **`config.yml`**: Stores environment-specific configurations, such as URLs for different environments (e.g., QA, production).
+**Description**: This feature enables the retrieval of locators for web elements defined in external YAML configuration files. It allows better management of element definitions and promotes maintainability.
+
+**Example**: Retrieving a locator for a username input field from a YAML file.
+
+```yaml
+# elements.yml
+elements:
+  loginForm:
+    usernameInput: "CSS_input.username"  # CSS locator for username input
+```
+
+```java
+// Using the ElementLocatorHelper to fetch the locator value
+ElementLocatorHelper locatorHelper = new ElementLocatorHelper();
+String usernameLocator = locatorHelper.getElement("loginForm", "usernameInput"); // Fetching locator value
+Locator myLocator = page.locator(usernameLocator); // Using fetched locator
+```
+
+### 3. Page Helper
+
+**Description**: The Page Helper class serves as a utility to assist with operations on the Playwright Page object, encapsulating common functionalities related to page interactions.
+
+**Example**: Navigating to a specific URL.
+
+```java
+PageHelper pageHelper = new PageHelper(page); // Creating Page Helper instance
+pageHelper.page.navigate("http://example.com/login"); // Navigating to URL
+```
+
+### 4. Cucumber Hooks Integration
+
+**Description**: This feature manages the setup and teardown processes for Cucumber scenarios, ensuring the browser context is correctly initialized and cleaned up after each test execution.
+
+**Example**: Setting up the browser context before a scenario runs.
+
+```java
+@Before
+public void setUp(Scenario scenario) {
+    // Initialize browser and context
+    Hooks.setUp(scenario);
+}
+
+// Teardown after the scenario execution
+@After
+public void tearDown(Scenario scenario) {
+    Hooks.tearDown(scenario);
+}
+```
+
+### 5. Comprehensive Logging and Reporting
+
+**Description**: The framework uses SLF4J for structured logging, helping keep track of actions and error states during test executions. Error logging is accompanied by details and screenshots when failures occur.
+
+**Example**: Logging an error during a test execution.
+
+```java
+try {
+    actionPerformer.performAction("click", myLocator, null); // Attempting to click
+} catch (Exception e) {
+    logger.error("Error while clicking on the button: {}", e.getMessage()); // Logging error details
+}
+```
+
+### 6. Dynamic Content Waits
+
+**Description**: The framework supports waiting mechanisms for elements to become visible or to transition states (like appearing or disappearing) to prevent flaky tests.
+
+**Example**: Waiting for an element to appear before interacting with it.
+
+```java
+myLocator.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE)); // Waiting for visibility
+actionPerformer.performAction("click", myLocator, null);
+```
+
+### 7. File Upload and Download Support
+
+**Description**: Simplifies file upload and download actions, allowing tests to manage files as part of the testing process.
+
+**Example**: Uploading a file through an input field.
+
+```java
+Locator fileInputLocator = page.locator("input[type='file']"); // Locating file input
+actionPerformer.performAction("uploadfile", fileInputLocator, "/path/to/file"); // Uploading the file
+```
+
+### 8. Error Handling
+
+**Description**: Robust error handling throughout the framework ensures proper logging and recovery actions, improving test reliability.
+
+**Example**: Capturing a screenshot and logging an error on test failure.
+
+```java
+try {
+    // Perform test actions
+} catch (Exception e) {
+    logger.error("Test failed: {}", e.getMessage());
+    byte[] screenshot = page.screenshot(); // Capture screenshot
+    scenario.attach(screenshot, "image/png", "Screenshot for failure"); // Attach screenshot to report
+}
+```
+
+---
+
+## Conclusion
+
+This Playwright Automation Framework is designed to offer a comprehensive, feature-rich solution for automating web testing. Each key feature is structured for easy integration and is supported by thorough example usages. Following this guide will enable you to maximize the efficiency and effectiveness of your automated testing strategies.
+
+These professional excerpts can be copy-pasted directly into your documentation or README file, making it easy for users to understand and utilize the features of your automation framework.
+### Technologies Used
+
+- **Playwright**: A modern automation library for browser testing that supports multiple languages and frameworks.
+- **JUnit/Cucumber**: For managing and running tests in a BDD style. This enables writing tests in a human-readable format and facilitates collaboration between technical and non-technical stakeholders.
+- **YAML**: Used for configuration management, allowing for flexible and externalized element locator definitions.
+- **Maven/Gradle**: Package management and build automation tools to manage dependencies and build processes.
+
+### How to Use
+
+#### 1. **Setup Your Environment**:
+- Ensure you have Java Development Kit (JDK) and Maven/Gradle installed.
+- Clone the repository or download the source code containing the framework.
+
+#### 2. **Add Dependencies**:
+Update your `pom.xml` (for Maven) or `build.gradle` (for Gradle) to include Playwright and necessary dependencies.
+
+**Maven Example**:
+   ```xml
+   <dependencies>
+       <dependency>
+           <groupId>com.microsoft.playwright</groupId>
+           <artifactId>playwright</artifactId>
+           <version>1.16.0</version> <!-- Check for the latest version -->
+       </dependency>
+       <dependency>
+           <groupId>io.cucumber</groupId>
+           <artifactId>cucumber-java</artifactId>
+           <version>6.10.4</version>
+       </dependency>
+       <!-- Additional dependencies -->
+   </dependencies>
+   ```
+
+#### 3. **Define Configuration**:
+Create a YAML configuration file in the `elements` directory that defines the locators for your elements. Ensure the structure is as follows:
+
+**Example: elements.yml**
+   ```yaml
+   elements:
+     loginForm:
+       usernameInput: "CSS_username"
+       passwordInput: "CSS_password"
+       submitButton: "BUTTON_submit"
+   ```
+
+#### 4. **Create Test Scenarios**:
+Write your feature files in Cucumber syntax, focusing on the business logic in human-readable language.
+
+**Example: login.feature**
+   ```gherkin
+   Feature: User Login
+
+     Scenario: Successful Login
+       Given I navigate to the login page
+       When I enter "testUser" in the username field
+       And I enter "password123" in the password field
+       And I click on the submit button
+       Then I should see the welcome message
+   ```
+
+#### 5. **Implement Step Definitions**:
+Create step definition classes that map to the steps defined in your feature files, utilizing the `PageCommonMethods` and other helper classes to perform actions.
+
+**Example: LoginSteps.java**
+   ```java
+   public class LoginSteps {
+       private final PageCommonMethods pageMethods;
+
+       public LoginSteps(Page page) {
+           this.pageMethods = new PageCommonMethods(page);
+       }
+
+       @Given("I navigate to the login page")
+       public void iNavigateToTheLoginPage() {
+           pageMethods.navigateTo("http://example.com/login"); // Implement navigateTo method accordingly
+       }
+
+       @When("I enter {string} in the username field")
+       public void iEnterInTheUsernameField(String username) {
+           pageMethods.fill(page, "Username Input", "usernameInput", username);
+       }
+
+       @When("I enter {string} in the password field")
+       public void iEnterInThePasswordField(String password) {
+           pageMethods.fill(page, "Password Input", "passwordInput", password);
+       }
+
+       @When("I click on the submit button")
+       public void iClickOnTheSubmitButton() {
+           pageMethods.click(page, "Submit Button", "submitButton");
+       }
+
+       @Then("I should see the welcome message")
+       public void iShouldSeeTheWelcomeMessage() {
+           Assert.assertTrue(pageMethods.assertElementTextPage(page, "Welcome Message", "welcomeText", "Welcome to the application!"));
+       }
+   }
+   ```
+
+#### 6. **Run Your Tests**:
+Use your preferred test runner to execute your Cucumber tests. If configured properly, your automated tests will run against a real browser instance using the defined actions and configurations.
+
+### Supported Actions
+
+The framework supports a versatile set of actions that can be performed on UI elements:
+
+- **Basic Interactions**:
+   - Click/Double Click/Right Click
+   - Fill input fields
+   - Upload files
+   - Select options from dropdown elements
+
+- **Visibility Checks**:
+   - Assert that the element is visible, enabled, or checked.
+
+- **Dynamic Content Waits**:
+   - Wait for elements to appear/disappear based on state or text content, preventing flaky tests.
+
+### Error Handling
+
+Robust error handling mechanisms are embedded throughout the framework. They include:
+
+- **Logging**: Detailed logs are generated for each action taken, alongside error messages when exceptions occur. This provides context for debugging during test runs.
+
+- **Screenshot Capture**: Automatically captures screenshots when a scenario fails, aiding in post-mortem analysis and visibility into the application state at the point of failure.
+
+### Conclusion
+
+This Playwright Automation Framework provides an extensive, feature-rich solution for automated web application testing. Leveraging modern practices and technology stacks, it allows QA teams to write clean, maintainable tests that are easy to extend and robust against changes in application behavior. By following the sections outlined in this README, you can effectively set up and run automation tests for your web applications, significantly enhancing your testing capabilities.
+
+### Future Improvements
+
+- **Integration with Continuous Integration (CI) Tools**: Potential integration with Jenkins, Travis CI, or GitHub Actions for automated execution of tests on code changes.
+- **Cross-Browser Testing**: Extending support for multiple browsers and devices to ensure the application behaves consistently across various platforms.
+- **Parallel Execution**: Implementing parallel test execution to speed up the testing process, thereby reducing the feedback time for developers.
+- **Test Reporting**: Enhancing the reporting capabilities to generate more comprehensive test reports, including metrics on test execution times and success rates.
 
 ---
 

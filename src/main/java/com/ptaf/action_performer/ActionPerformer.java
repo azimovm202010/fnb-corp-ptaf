@@ -1,6 +1,5 @@
 package com.ptaf.action_performer;
 
-
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.options.MouseButton;
 import com.microsoft.playwright.options.WaitForSelectorState;
@@ -9,6 +8,21 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Paths;
 
+/**
+ * ActionPerformer is a utility class that provides methods to interact with UI elements
+ * using Playwright's Locator API. It allows performing different actions on web elements.
+ *
+ * Usage:
+ * 1. Create an instance of ActionPerformer.
+ * 2. Use the 'performAction' method to execute an action on a specific Locator.
+ * 3. Call 'waitForLocator' to ensure an element is visible before performing actions on it.
+ *
+ * Example:
+ * ActionPerformer actionPerformer = new ActionPerformer();
+ * Locator myLocator = page.locator("selector-for-element");
+ * actionPerformer.waitForLocator(myLocator);
+ * actionPerformer.performAction("click", myLocator, null);
+ */
 public class ActionPerformer {
 
     private static final Logger logger = LoggerFactory.getLogger(ActionPerformer.class);
@@ -16,155 +30,187 @@ public class ActionPerformer {
     /**
      * Perform the specified action on the given Locator.
      *
-     * @param action        The action to perform (click, fill, etc.).
-     * @param targetLocator The target Locator element.
-     * @param value         The value for the action (used for fill, select, etc.).
+     * @param action        The action to perform (e.g., "click", "fill", "select").
+     * @param targetLocator The target Locator element on which the action will be performed.
+     * @param value         The value for the action (e.g., text to fill in or an attribute to set).
+     *                      For actions like "selectmultiple" or "uploadfile", this value should be formatted accordingly.
+     *                      It can also be null if not required for the action.
      */
     public void performAction(String action, Locator targetLocator, String value) {
         try {
             switch (action.toLowerCase()) {
                 case "click":
-                    targetLocator.click();
+                    targetLocator.click(); // Clicks the element represented by the Locator
                     break;
                 case "fill":
-                    targetLocator.fill(value);
+                    targetLocator.fill(value); // Fills the input field with the specified value
                     break;
                 case "select":
-                    targetLocator.selectOption(value);
+                    targetLocator.selectOption(value); // Selects a single option in a dropdown
                     break;
                 case "selectmultiple":
-                    targetLocator.selectOption(value.split(",")); // For selecting multiple options
+                    targetLocator.selectOption(value.split(",")); // Selects multiple options from a dropdown
                     break;
                 case "check":
-                    targetLocator.check();
+                    targetLocator.check(); // Checks a checkbox
                     break;
                 case "uncheck":
-                    targetLocator.uncheck();
+                    targetLocator.uncheck(); // Unchecks a checkbox
                     break;
                 case "hover":
-                    targetLocator.hover();
+                    targetLocator.hover(); // Hovers over the element
                     break;
                 case "type":
-                    targetLocator.type(value);
+                    targetLocator.type(value); // Types the specified value into an input field
                     break;
                 case "press":
-                    targetLocator.press(value);
+                    targetLocator.press(value); // Simulates pressing a keyboard key
                     break;
                 case "dblclick":
-                    targetLocator.dblclick();
+                    targetLocator.dblclick(); // Double-clicks the element
                     break;
                 case "screenshot":
+                    // Takes a screenshot of the element and saves it to the specified file path
                     targetLocator.screenshot(new Locator.ScreenshotOptions().setPath(Paths.get(value)));
                     break;
                 case "scroll":
+                    // Scrolls the element into view smoothly
                     targetLocator.evaluate("element => element.scrollIntoView({ behavior: 'smooth', block: 'center' })");
                     break;
                 case "focus":
-                    targetLocator.focus();
+                    targetLocator.focus(); // Sets focus on the element
                     break;
                 case "blur":
-                    targetLocator.evaluate("element => element.blur()");
+                    targetLocator.evaluate("element => element.blur()"); // Removes focus from the element
                     break;
                 case "clear":
-                    targetLocator.clear(); // Clear the text input field
+                    targetLocator.clear(); // Clears the text input field
                     break;
                 case "drag":
-                    // Expecting the value to be the target element's selector
+                    // Drags the target element to another specified element
                     Locator target = targetLocator.page().locator(value);
                     targetLocator.dragTo(target);
                     break;
                 case "getattribute":
+                    // Retrieves the value of a specified attribute and prints it
                     System.out.println("Attribute value: " + targetLocator.getAttribute(value));
                     break;
                 case "setattribute":
+                    // Sets a specified attribute value for the element
                     targetLocator.evaluate("(element, attributeValue) => element.setAttribute('value', attributeValue)", value);
                     break;
                 case "removeattribute":
+                    // Removes a specified attribute from the element
                     targetLocator.evaluate("(element, attributeName) => element.removeAttribute(attributeName)", value);
                     break;
                 case "gettext":
+                    // Retrieves and prints the text content of the element
                     String text = targetLocator.textContent();
                     System.out.println("Element text content: " + text);
                     break;
                 case "getvalue":
+                    // Retrieves and prints the current value of the element (for input fields)
                     String valueContent = targetLocator.inputValue();
                     System.out.println("Element value: " + valueContent);
                     break;
                 case "isvisible":
+                    // Checks if the element is visible on the page
                     boolean isVisible = targetLocator.isVisible();
                     System.out.println("Element is visible: " + isVisible);
                     break;
                 case "isenabled":
+                    // Checks if the element is enabled (interactable)
                     boolean isEnabled = targetLocator.isEnabled();
                     System.out.println("Element is enabled: " + isEnabled);
                     break;
                 case "ischecked":
+                    // Checks if a checkbox is checked
                     boolean isChecked = targetLocator.isChecked();
                     System.out.println("Element is checked: " + isChecked);
                     break;
                 case "exists":
+                    // Checks if the element exists in the DOM
                     boolean exists = targetLocator.count() > 0;
                     System.out.println("Element exists: " + exists);
                     break;
                 case "evaluate":
-                    // Evaluate a custom JavaScript expression
+                    // Evaluates a custom JavaScript expression within the context of the element
                     targetLocator.evaluate(value);
                     break;
                 case "waitforelement":
+                    // Waits for the element to be present in the DOM and visible
                     targetLocator.waitFor();
                     break;
                 case "waitforstate":
+                    // Waits for the specified state (e.g., visible, hidden) of the element
                     targetLocator.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.valueOf(value.toUpperCase())));
                     break;
                 case "waitfortext":
+                    // Waits until the specified text is present in the element
                     targetLocator.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
                     if (!targetLocator.textContent().contains(value)) {
                         throw new IllegalArgumentException("Text '" + value + "' not found in element");
                     }
                     break;
                 case "waitforvalue":
+                    // Waits until the input value matches the specified value
                     targetLocator.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
                     if (!targetLocator.inputValue().equals(value)) {
                         throw new IllegalArgumentException("Expected value '" + value + "' not found in element");
                     }
                     break;
                 case "rightclick":
+                    // Simulates a right-click on the element
                     targetLocator.click(new Locator.ClickOptions().setButton(MouseButton.valueOf("right")));
                     break;
                 case "tap":
+                    // Simulates a tap action on touch devices
                     targetLocator.tap();
                     break;
                 case "uploadfile":
+                    // Uploads a file to the element (input file type)
                     targetLocator.setInputFiles(Paths.get(value)); // Assuming value is a file path
                     break;
                 case "dragstart":
+                    // Dispatches the dragstart event on the element
                     targetLocator.dispatchEvent("dragstart");
                     break;
                 case "dragend":
+                    // Dispatches the dragend event on the element
                     targetLocator.dispatchEvent("dragend");
                     break;
                 case "input":
-                    targetLocator.evaluate("(element, val) => element.value = val", value); // Directly set input value
+                    // Directly sets the input field's value
+                    targetLocator.evaluate("(element, val) => element.value = val", value);
                     break;
                 case "selectfile":
+                    // Similar to uploadfile, but specifically for <input type="file">
                     targetLocator.setInputFiles(Paths.get(value)); // Selects file to upload
                     break;
                 default:
-                    throw new IllegalArgumentException("Unknown action: " + action);
+                    throw new IllegalArgumentException("Unknown action: " + action); // Throws error if action is not recognized
             }
         } catch (Exception e) {
+            // Logs the error and throws a runtime exception
             logger.error("Error while performing action: {}", e.getMessage());
             throw new RuntimeException("Action failed: " + e.getMessage(), e);
         }
     }
 
+    /**
+     * Waits for a specified Locator to become visible.
+     *
+     * @param locator The Locator to wait for.
+     *                Will time out after 60 seconds if the element is not visible.
+     */
     public void waitForLocator(Locator locator) {
         try {
             locator.waitFor(new Locator.WaitForOptions()
-                    .setState(WaitForSelectorState.VISIBLE)
+                    .setState(WaitForSelectorState.VISIBLE) // Wait until the element is visible
                     .setTimeout(60000)); // 1-minute timeout
         } catch (Exception e) {
-//            logger.error("Failed to wait for the element to be displayed", e);
+            // Logs the error if waiting for the element fails
+            logger.error("Failed to wait for the element to be displayed", e);
         }
     }
 }

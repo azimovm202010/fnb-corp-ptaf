@@ -10,89 +10,197 @@ import com.ptaf.page_helper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * ElementActionImpl is an implementation of the ElementAction interface that provides methods for
+ * performing actions and assertions on web elements within an instance of a Playwright Page or FrameLocator.
+ * It utilizes the ActionPerformer, LocatorHandler, and ElementLocatorHelper to manage interactions
+ * with various elements on a web page.
+ *
+ * Usage:
+ * 1. Instantiate ElementActionImpl with a Page object.
+ * 2. Call `performActionPage` or `performActionFrame` to execute specific actions on elements.
+ * 3. Use the `assertElementTextPage` or `assertElementTextFrame` methods for validating the text
+ *    content of elements.
+ */
 public class ElementActionImpl extends PageHelper implements ElementAction {
     private static final Logger logger = LoggerFactory.getLogger(ElementActionImpl.class);
-    private final ActionPerformer actionPerformer = new ActionPerformer();
-    private final ElementLocatorHelper elementLocatorHelper = new ElementLocatorHelper();
-    private final LocatorHandler locatorHandler = new LocatorHandler();
+    private final ActionPerformer actionPerformer = new ActionPerformer(); // Handles action execution on Locators
+    private final ElementLocatorHelper elementLocatorHelper = new ElementLocatorHelper(); // Assists in locating elements
+    private final LocatorHandler locatorHandler = new LocatorHandler(); // Manages Locator creation based on type
 
+    /**
+     * Constructor for ElementActionImpl. Inheritance from PageHelper allows
+     * initializing with a Page instance for element interaction.
+     *
+     * @param page The Playwright Page instance to interact with web elements.
+     */
     public ElementActionImpl(Page page) {
-        super(page);
+        super(page); // Initialize the PageHelper with the provided Page
     }
 
+    /**
+     * Perform an action on an element located on the current Page.
+     *
+     * @param page   The Page where the action is performed.
+     * @param action The action to perform (e.g., "click", "fill").
+     * @param element The identifier for the target element.
+     * @param key    Additional identifier key for locating the element.
+     * @param value  The value associated with the action (if applicable).
+     * @return boolean indicating success or failure of the action.
+     */
     @Override
     public boolean performActionPage(Page page, String action, String element, String key, String value) {
-        return performAction(page, action, element, key, value, null);
+        return performAction(page, action, element, key, value, null); // Delegates to private method with null frame
     }
 
+    /**
+     * Perform an action on an element located in a specified Frame.
+     *
+     * @param frameLocator The FrameLocator for identifying the frame containing the element.
+     * @param action      The action to perform.
+     * @param element     The identifier for the target element.
+     * @param key         Additional identifier key for locating the element.
+     * @param value       The value associated with the action (if applicable).
+     * @return boolean indicating success or failure of the action.
+     */
     @Override
     public boolean performActionFrame(FrameLocator frameLocator, String action, String element, String key, String value) {
-        return performAction(null, action, element, key, value, frameLocator);
+        return performAction(null, action, element, key, value, frameLocator); // Delegates with null page
     }
 
+    /**
+     * Internal method for performing actions on either a Page or FrameLocator.
+     *
+     * @param page          The Page object (if applicable).
+     * @param action        The action to perform.
+     * @param element       The identifier for the target element.
+     * @param key           Additional identifier key for locating the element.
+     * @param value         The value associated with the action (if applicable).
+     * @param frameLocator   The FrameLocator (if applicable).
+     * @return boolean indicating success or failure of the action.
+     */
     private boolean performAction(Page page, String action, String element, String key, String value, FrameLocator frameLocator) {
         try {
+            // Determine the correct Locator based on the context (Page or Frame)
             Locator targetLocator = (page != null)
                     ? getLocatorBasedOnPage(page, element, key)
                     : getLocatorBasedOnFrame(frameLocator, element, key);
-            actionPerformer.waitForLocator(targetLocator);
-            actionPerformer.performAction(action, targetLocator, value);
-            return true;
+            actionPerformer.waitForLocator(targetLocator); // Ensure the Locator is ready before performing actions
+            actionPerformer.performAction(action, targetLocator, value); // Execute the action using ActionPerformer
+            return true; // Action was successful
         } catch (Exception e) {
+            // Log the error details and return false to indicate failure
             logger.error("Error while performing action '{}' on element '{}'", action, element, e);
             return false;
         }
     }
 
+    /**
+     * Asserts that the text content of an element on the current Page matches the expected text.
+     *
+     * @param page        The Page where the assertion is performed.
+     * @param element     The identifier for the target element.
+     * @param key         Additional identifier key for locating the element.
+     * @param expectedText The expected text to match against the element's content.
+     * @return boolean indicating whether the text matches the expected value.
+     */
     @Override
     public boolean assertElementTextPage(Page page, String element, String key, String expectedText) {
-        return assertElementText(page, element, key, expectedText, null);
+        return assertElementText(page, element, key, expectedText, null); // Delegates to private method with null frame
     }
 
+    /**
+     * Asserts that the text content of an element in a specified Frame matches the expected text.
+     *
+     * @param frameLocator The FrameLocator for identifying the frame containing the element.
+     * @param element     The identifier for the target element.
+     * @param key         Additional identifier key for locating the element.
+     * @param expectedText The expected text to match against the element's content.
+     * @return boolean indicating whether the text matches the expected value.
+     */
     @Override
     public boolean assertElementTextFrame(FrameLocator frameLocator, String element, String key, String expectedText) {
-        return assertElementText(null, element, key, expectedText, frameLocator);
+        return assertElementText(null, element, key, expectedText, frameLocator); // Delegates with null page
     }
 
+    /**
+     * Internal method to assert the text content of an element, applicable to Page or Frame.
+     *
+     * @param page          The Page object (if applicable).
+     * @param element       The identifier for the target element.
+     * @param key           Additional identifier key for locating the element.
+     * @param expectedText  The expected text to match against the element's content.
+     * @param frameLocator   The FrameLocator (if applicable).
+     * @return boolean indicating whether the text matches the expected value.
+     */
     private boolean assertElementText(Page page, String element, String key, String expectedText, FrameLocator frameLocator) {
         try {
+            // Determine the correct Locator based on the context
             Locator targetLocator = (page != null)
                     ? getLocatorBasedOnPage(page, element, key)
                     : getLocatorBasedOnFrame(frameLocator, element, key);
-            String actualText = targetLocator.textContent();
-            boolean isTextMatching = expectedText.equals(actualText);
+            String actualText = targetLocator.textContent(); // Retrieve the actual text content
+            boolean isTextMatching = expectedText.equals(actualText); // Compare expected and actual text
 
-            // Log the actual and expected text
+            // Log the actual and expected text content
             logger.info("Asserting text on element '{}': expected '{}', actual '{}'", element, expectedText, actualText);
 
             if (!isTextMatching) {
-                logger.error("Text mismatch: expected '{}' but found '{}'", expectedText, actualText);
+                logger.error("Text mismatch: expected '{}' but found '{}'", expectedText, actualText); // Log error on mismatch
             }
-            return isTextMatching;
+            return isTextMatching; // Return result of text comparison
         } catch (Exception e) {
+            // Log the error details and return false to indicate failure
             logger.error("Error while asserting text on element '{}'", element, e);
             return false;
         }
     }
 
+    /**
+     * Retrieves a Locator based on a given Page context.
+     *
+     * @param page   The Page from which to locate the element.
+     * @param element The identifier for the target element.
+     * @param key    Additional identifier key for locating the element.
+     * @return The Locator for the identified element.
+     */
     private Locator getLocatorBasedOnPage(Page page, String element, String key) {
         return getLocator(element, key, page, null);
     }
 
+    /**
+     * Retrieves a Locator based on a given Frame context.
+     *
+     * @param frameLocator The FrameLocator containing the element.
+     * @param element     The identifier for the target element.
+     * @param key         Additional identifier key for locating the element.
+     * @return The Locator for the identified element.
+     */
     private Locator getLocatorBasedOnFrame(FrameLocator frameLocator, String element, String key) {
         return getLocator(element, key, null, frameLocator);
     }
 
+    /**
+     * Retrieves a Locator for the specified element by determining its type and context.
+     *
+     * @param element       The identifier for the target element.
+     * @param key           Additional identifier key for locating the element.
+     * @param page          The Page object (if applicable).
+     * @param frameLocator   The FrameLocator (if applicable).
+     * @return The Locator for the identified element.
+     * @throws RuntimeException If the context (Page or Frame) is unknown.
+     */
     private Locator getLocator(String element, String key, Page page, FrameLocator frameLocator) {
-        String locatorValue = elementLocatorHelper.getElement(element, key);
-        String locatorType = elementLocatorHelper.getLocatorType(locatorValue);
-        String locator = elementLocatorHelper.getLocator(locatorValue);
+        String locatorValue = elementLocatorHelper.getElement(element, key); // Get the locator value based on the element and key
+        String locatorType = elementLocatorHelper.getLocatorType(locatorValue); // Get the locator type (e.g., ID, class)
+        String locator = elementLocatorHelper.getLocator(locatorValue); // Extract the locator string
         try {
+            // Return the appropriate Locator based on whether being called in a Page or Frame context
             return (page != null)
                     ? locatorHandler.getLocatorForType(locatorType, page, locator)
                     : locatorHandler.getLocatorForType(locatorType, frameLocator, locator);
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Unknown context: " + (page != null ? page : frameLocator), e);
+            throw new RuntimeException("Unknown context: " + (page != null ? page : frameLocator), e); // Handle unknown context cases
         }
     }
 }
