@@ -104,6 +104,16 @@ public class PageCommonSteps {
         pageCommonMethods.gettext(page, element, locator);
     }
 
+    @Then("^we get value on page (.*?) locator (.*?)$")
+    public void weGetValueOnPage(String element, String locator) {
+        pageCommonMethods.getvalue(page, element, locator);
+    }
+
+    @Then("^we has value on page (.*?) of locator (.*?) value \"(.*?)\"$")
+    public void weHasValueOnPageLocatorValue(String element, String locator, String value) {
+        pageCommonMethods.hasvalue(page, element, locator, value);
+    }
+
     @Then("^we get list of elements on page (.*?) locator (.*?)$")
     public void weGetListOfElementsOnPage(String element, String locator) {
         pageCommonMethods.getListOfElements(page, element, locator);

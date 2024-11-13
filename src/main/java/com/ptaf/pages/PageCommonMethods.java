@@ -336,6 +336,74 @@ public class PageCommonMethods {
         performAction("uploadfile", page, element, locator, value);
     }
 
+    public void selectMultiple(Page page, String element, String locator) {
+        performAction("selectmultiple", page, element, locator, null);
+    }
+
+    public void getAttribute(Page page, String element, String locator, String value) {
+        performAction("getattribute", page, element, locator, value);
+    }
+
+    public void setAttribute(Page page, String element, String locator, String value) {
+        performAction("setattribute", page, element, locator, value);
+    }
+
+    public void removeAttribute(Page page, String element, String locator, String value) {
+        performAction("removeattribute", page, element, locator, value);
+    }
+
+    public void evaluate(Page page, String element, String locator, String value) {
+        performAction("evaluate", page, element, locator, value);
+    }
+
+    public void waitForElement(Page page, String element, String locator) {
+        performAction("waitForelement", page, element, locator, null);
+    }
+
+    public void waitForState(Page page, String element, String locator) {
+        performAction("waitforstate", page, element, locator, null);
+    }
+
+    public void waitForText(Page page, String element, String locator, String value) {
+        performAction("waitfortext", page, element, locator, value);
+    }
+
+    public void waitForValue(Page page, String element, String locator, String value) {
+        performAction("waitforvalue", page, element, locator, value);
+    }
+
+    public void dragStart(Page page, String element, String locator) {
+        performAction("dragstart", page, element, locator, null);
+    }
+
+    public void dragEnd(Page page, String element, String locator) {
+        performAction("dragend", page, element, locator, null);
+    }
+
+    public void input(Page page, String element, String locator, String value) {
+        performAction("input", page, element, locator, value);
+    }
+
+    public void selectFile(Page page, String element, String locator, String value){
+        performAction("selectfile", page, element, locator, value);
+    }
+
+    public void hasText(Page page, String element, String locator, String value) {
+        performAction("hastext", page, element, locator, value);
+    }
+
+    public void hasclass(Page page, String element, String locator) {
+        performAction("hasclass", page, element, locator, null);
+    }
+
+    public void hasEqualValue(Page page, String element, String locator, String value) {
+        performAction("hasqualvalue", page, element, locator, value);
+    }
+
+    public void isempty(Page page, String element, String locator) {
+        performAction("isempty", page, element, locator, null);
+    }
+
     /**
      * Centralized method to perform actions on elements,
      * managing success and failure scenarios.
@@ -355,6 +423,42 @@ public class PageCommonMethods {
         });
     }
 
+    /**
+     * Checks if the specified element has the expected value.
+     *
+     * <p>
+     * This method interacts with the specified web element, identified by the
+     * provided locator, to verify if its current value matches the expected value.
+     * This is useful for assertions in test scenarios where the correctness of
+     * input fields or other value-bearing elements needs to be validated.
+     * </p>
+     *
+     * @param page The current Playwright Page instance used to interact with the browser.
+     * @param element The logical name of the element being checked, for logging purposes.
+     * @param locator The locator string used to identify the element on the page.
+     * @param value The expected value that the element should have.
+     */
+    public void hasvalue(Page page, String element, String locator, String value) {
+        performAction("hasvalue", page, element, locator, value); // Executes the action to check the value
+    }
+
+    /**
+     * Retrieves the current value of the specified element.
+     *
+     * <p>
+     * This method interacts with the element identified by the locator and
+     * retrieves its current value. This can be useful in scenarios where the
+     * current state of a field (for example, after a user action) needs to be
+     * checked or stored for further verification.
+     * </p>
+     *
+     * @param page The current Playwright Page instance used to interact with the browser.
+     * @param element The logical name of the element whose value is being retrieved, for logging purposes.
+     * @param locator The locator string used to identify the element on the page.
+     */
+    public void getvalue(Page page, String element, String locator) {
+        performAction("getvalue", page, element, locator, null); // Executes the action to retrieve the value
+    }
     /**
      * Retrieves and prints a list of elements on the specified page.
      * This method locates elements based on the provided element name and locator key,

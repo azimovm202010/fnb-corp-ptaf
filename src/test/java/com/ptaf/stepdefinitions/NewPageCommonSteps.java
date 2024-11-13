@@ -92,6 +92,11 @@ public class NewPageCommonSteps {
         pageCommonMethods.gettext(new_page, element, locator);
     }
 
+    @Then("^we has value on new page (.*?) of locator (.*?) value \"(.*?)\"$")
+    public void weHasValueOnNewPageLocatorValue(String element, String locator, String value) {
+        pageCommonMethods.hasvalue(new_page, element, locator, value);
+    }
+
     @Then("^we get list of elements on new page (.*?) locator (.*?)$")
     public void weGetListOfElementsOnNewPage(String element, String locator) {
         pageCommonMethods.gettext(new_page, element, locator);

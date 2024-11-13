@@ -12,16 +12,20 @@ import java.nio.file.Paths;
  * ActionPerformer is a utility class that provides methods to interact with UI elements
  * using Playwright's Locator API. It allows performing different actions on web elements.
  *
- * Usage:
- * 1. Create an instance of ActionPerformer.
- * 2. Use the 'performAction' method to execute an action on a specific Locator.
- * 3. Call 'waitForLocator' to ensure an element is visible before performing actions on it.
+ * <h2>Usage:</h2>
+ * <ol>
+ *     <li>Create an instance of ActionPerformer.</li>
+ *     <li>Use the 'performAction' method to execute an action on a specific Locator.</li>
+ *     <li>Call 'waitForLocator' to ensure an element is visible before performing actions on it.</li>
+ * </ol>
  *
- * Example:
+ * <h2>Example:</h2>
+ * <pre>
  * ActionPerformer actionPerformer = new ActionPerformer();
  * Locator myLocator = page.locator("selector-for-element");
  * actionPerformer.waitForLocator(myLocator);
  * actionPerformer.performAction("click", myLocator, null);
+ * </pre>
  */
 public class ActionPerformer {
 
@@ -113,25 +117,34 @@ public class ActionPerformer {
                     String valueContent = targetLocator.inputValue();
                     System.out.println("Element value: " + valueContent);
                     break;
+                case "hasvalue":
+                    // Checks if the current value of the input element matches the expected value
+                    String currentValue = targetLocator.inputValue();
+                    if (currentValue != null && currentValue.equals(value)) {
+                        System.out.println("Element has the expected value: " + value);
+                    } else {
+                        throw new AssertionError("Element does not have the expected value. Expected: " + value + ", but found: " + currentValue);
+                    }
+                    break;
                 case "isvisible":
-                    // Checks if the element is visible on the page
+                    // Asserts that the element is visible on the page
                     boolean isVisible = targetLocator.isVisible();
-                    System.out.println("Element is visible: " + isVisible);
+                    assertCondition(isVisible, "Element is not visible.");
                     break;
                 case "isenabled":
-                    // Checks if the element is enabled (interactable)
+                    // Asserts that the element is enabled (interactable)
                     boolean isEnabled = targetLocator.isEnabled();
-                    System.out.println("Element is enabled: " + isEnabled);
+                    assertCondition(isEnabled, "Element is not enabled.");
                     break;
                 case "ischecked":
-                    // Checks if a checkbox is checked
+                    // Asserts that a checkbox is checked
                     boolean isChecked = targetLocator.isChecked();
-                    System.out.println("Element is checked: " + isChecked);
+                    assertCondition(isChecked, "Element is not checked.");
                     break;
                 case "exists":
-                    // Checks if the element exists in the DOM
+                    // Asserts that the element exists in the DOM
                     boolean exists = targetLocator.count() > 0;
-                    System.out.println("Element exists: " + exists);
+                    assertCondition(exists, "Element does not exist in the DOM.");
                     break;
                 case "evaluate":
                     // Evaluates a custom JavaScript expression within the context of the element
@@ -149,14 +162,14 @@ public class ActionPerformer {
                     // Waits until the specified text is present in the element
                     targetLocator.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
                     if (!targetLocator.textContent().contains(value)) {
-                        throw new IllegalArgumentException("Text '" + value + "' not found in element");
+                        throw new AssertionError("Text '" + value + "' not found in element.");
                     }
                     break;
                 case "waitforvalue":
                     // Waits until the input value matches the specified value
                     targetLocator.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
                     if (!targetLocator.inputValue().equals(value)) {
-                        throw new IllegalArgumentException("Expected value '" + value + "' not found in element");
+                        throw new AssertionError("Expected value '" + value + "' not found in element.");
                     }
                     break;
                 case "rightclick":
@@ -187,6 +200,28 @@ public class ActionPerformer {
                     // Similar to uploadfile, but specifically for <input type="file">
                     targetLocator.setInputFiles(Paths.get(value)); // Selects file to upload
                     break;
+                // More Playwright assertions can be added here
+                case "hastext":
+                    // Asserts that the element contains the specified text
+                    String elementText = targetLocator.textContent();
+                    assertCondition(elementText.contains(value), "Element does not contain text: " + value);
+                    break;
+                case "hasclass":
+                    // Asserts that the element has the specified CSS class
+                    String className = value; // Assuming value is the class name
+                    boolean hasClass = targetLocator.getAttribute("class").contains(className);
+                    assertCondition(hasClass, "Element does not have expected class: " + className);
+                    break;
+                case "hasequalvalue":
+                    // Asserts that the element's value is equal to the expected value
+                    String actualValue = targetLocator.inputValue();
+                    assertCondition(actualValue.equals(value), "Element's value is not equal to expected value: " + value);
+                    break;
+                case "isempty":
+                    // Asserts that the input is empty
+                    String inputValue = targetLocator.inputValue();
+                    assertCondition(inputValue.isEmpty(), "Element is not empty.");
+                    break;
                 default:
                     throw new IllegalArgumentException("Unknown action: " + action); // Throws error if action is not recognized
             }
@@ -194,6 +229,18 @@ public class ActionPerformer {
             // Logs the error and throws a runtime exception
             logger.error("Error while performing action: {}", e.getMessage());
             throw new RuntimeException("Action failed: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Asserts a condition and raises an AssertionError if the condition is false.
+     *
+     * @param condition The condition to assert.
+     * @param errorMessage The error message to display if the assertion fails.
+     */
+    private void assertCondition(boolean condition, String errorMessage) {
+        if (!condition) {
+            throw new AssertionError(errorMessage); // Throws an assertion error with the provided message
         }
     }
 
