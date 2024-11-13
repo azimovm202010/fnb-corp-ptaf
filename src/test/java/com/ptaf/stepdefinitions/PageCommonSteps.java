@@ -18,11 +18,18 @@ public class PageCommonSteps {
     private final PageCommonMethods pageCommonMethods = new PageCommonMethods(page);
     private static final Logger logger = LoggerFactory.getLogger(PageCommonSteps.class);
 
-    @Given("^we navigate to (.*?) url$")
-    public void weNavigateToURL(String URL) {
-        page.navigate(ConfigurationProperties.getBaseUrl(URL));
-//        page.setViewportSize(1920, 1080);
-    }
+//    public void switchToIframe() {
+//        Page iframePage = page.waitForPopup(() -> {
+//            page.frameLocator("iframe").getByRole(AriaRole.BUTTON, new FrameLocator.GetByRoleOptions().setName("Continue")).click();
+//        });
+//    }
+//
+//    @Given("^we navigate to (.*?) url$")
+//    public void weNavigateToURL(String URL) {
+//        page.navigate(ConfigurationProperties.getBaseUrl(URL));
+////        page.setViewportSize(1920, 1080);
+//        switchToIframe();
+//    }
 
     @Then("^we click on page (.*?) locator (.*?)$")
     public void weClickActionOnPage(String element, String locator) {

@@ -38,6 +38,9 @@ public interface ElementAction {
      */
     boolean performActionFrame(FrameLocator frameLocator, String action, String element, String key, String value);
 
+
+    boolean performActionPageFrame(Page page, String iFrame, String action, String element, String key, String value, FrameLocator frameLocator);
+
     boolean getElementHandlePage(Page page, String element, String key);
 
     boolean getElementHandleFrame(FrameLocator frameLocator, String element, String key);
