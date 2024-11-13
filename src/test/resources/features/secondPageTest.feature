@@ -21,6 +21,7 @@ Feature: Second Page Test
     Then we enter value on page personal locator email_field value "azimovm@fnb-corp.com"
     When we enter value on page personal locator zip_code_field value "15212"
     And we enter value on page personal locator phone_number value "412-482-1222"
+    Then we get list of elements on page landing locator list_of_element
     Then we click on page personal locator new_customer_check
     When we click on page personal locator continue_btn
     Then we click on new page personal locator continue_btn_window

@@ -1,12 +1,15 @@
 package com.ptaf.stepdefinitions;
 
+import com.microsoft.playwright.FrameLocator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import com.ptaf.hooks.Hooks;
 import com.ptaf.pages.PageCommonMethods;
 import com.ptaf.utils.ConfigurationProperties;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,6 +102,16 @@ public class PageCommonSteps {
     @Then("^we get text on page (.*?) locator (.*?)$")
     public void weGetTextOnPage(String element, String locator) {
         pageCommonMethods.gettext(page, element, locator);
+    }
+
+    @Then("^we get list of elements on page (.*?) locator (.*?)$")
+    public void weGetListOfElementsOnPage(String element, String locator) {
+        pageCommonMethods.getListOfElements(page, element, locator);
+    }
+
+    @When("we click radio on page (.*?) list locator (.*?)$")
+    public void clickRadioOnPage(String element, String locator) {
+        pageCommonMethods.clickRadioButton(page, element, locator);
     }
 
     @And("^we capture screenshot on page (.*?) locator (.*?) name \"(.*?)\"$")

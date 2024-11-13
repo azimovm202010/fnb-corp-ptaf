@@ -5,6 +5,7 @@ import com.ptaf.hooks.Hooks;
 import com.ptaf.pages.PageCommonMethods;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 public class NewPageCommonSteps {
     private final Page page = Hooks.getPage();
@@ -89,6 +90,16 @@ public class NewPageCommonSteps {
     @Then("^we get text on new page(.*?) locator (.*?)$")
     public void weGetTextOnPage(String element, String locator) {
         pageCommonMethods.gettext(new_page, element, locator);
+    }
+
+    @Then("^we get list of elements on new page (.*?) locator (.*?)$")
+    public void weGetListOfElementsOnNewPage(String element, String locator) {
+        pageCommonMethods.gettext(new_page, element, locator);
+    }
+
+    @When("we click radio on new page (.*?) list locator (.*?)$")
+    public void clickRadioOnNewPage(String element, String locator) {
+        pageCommonMethods.clickRadioButton(new_page, element, locator);
     }
 
     @And("^we capture screenshot on new page (.*?) locator (.*?) name \"(.*?)\"$")

@@ -1,5 +1,6 @@
 package com.ptaf.pages;
 
+import com.microsoft.playwright.ElementHandle;
 import com.ptaf.action_performer.ElementActionImpl;
 import com.ptaf.hooks.Hooks;
 import com.ptaf.interfaces.ElementAction;
@@ -9,6 +10,8 @@ import com.microsoft.playwright.Page;
 import io.cucumber.java.Scenario;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * <h1>PageCommonMethods</h1>
@@ -350,6 +353,58 @@ public class PageCommonMethods {
                 handleFailure(page, action, element);
             }
         });
+    }
+
+    /**
+     * Retrieves and prints a list of elements on the specified page.
+     * This method locates elements based on the provided element name and locator key,
+     * and prints each located element's details for debugging or verification purposes.
+     *
+     * @param page     The Playwright Page object representing the current browser page.
+     * @param element  The name of the element to locate, typically corresponding to a descriptive identifier.
+     * @param locator  The locator key, as specified in the YAML configuration, used to retrieve the element.
+     */
+    public void getListOfElements(Page page, String element, String locator) {
+        // Retrieve a list of element handles matching the provided element and locator key on the page.
+        List<ElementHandle> elements = elementAction.getElementHandleList(page, element, locator, null);
+
+        // Check if elements list is empty and log appropriate information
+        if (elements.isEmpty()) {
+            logger.info("No elements found for the specified locator.");
+        } else {
+            // Iterate through each element in the list and print its details.
+            for (int i = 0; i < elements.size(); i++) {
+                ElementHandle handle = elements.get(i);
+                logger.info("Element " + (i + 1) + ": " + handle.toString());
+            }
+        }
+    }
+
+    /**
+     * Attempts to click a radio button within a list of elements on a specified page.
+     * This method retrieves a list of element handles matching the provided element name and locator key,
+     * then iterates through each radio button in the list until it finds an enabled one to click.
+     *
+     * @param page     The Playwright Page object representing the current browser page.
+     * @param element  The name of the element to locate, typically corresponding to a descriptive identifier.
+     * @param locator  The locator key, as specified in the YAML configuration, used to retrieve the element.
+     */
+    public void clickRadioButton(Page page, String element, String locator) {
+        // Retrieve a list of element handles matching the provided element and locator key on the page.
+        List<ElementHandle> elements = elementAction.getElementHandleList(page, element, locator, null);
+
+        // Iterate through the list of element handles.
+        for (ElementHandle radioButton : elements) {
+            // Check if the current radio button is enabled and, if so, select it.
+            if (radioButton.isEnabled()) {
+                radioButton.check();  // Selects (clicks) the radio button
+                logger.info("Radio button clicked!");  // Logs the successful selection
+                break;  // Exit the loop once a radio button is successfully selected
+            } else {
+                // If the radio button is not enabled, log the information and continue to the next element.
+                logger.info("Radio button is not enabled, moving to the next one.");
+            }
+        }
     }
 
     /**

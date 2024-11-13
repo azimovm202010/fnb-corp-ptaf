@@ -1,7 +1,10 @@
 package com.ptaf.interfaces;
 
+import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.FrameLocator;
 import com.microsoft.playwright.Page;
+
+import java.util.List;
 
 /**
  * ElementAction interface defines a set of methods for interacting with web elements
@@ -35,6 +38,10 @@ public interface ElementAction {
      */
     boolean performActionFrame(FrameLocator frameLocator, String action, String element, String key, String value);
 
+    boolean getElementHandlePage(Page page, String element, String key);
+
+    boolean getElementHandleFrame(FrameLocator frameLocator, String element, String key);
+
     /**
      * Asserts that the text of a web element on the main page matches the expected text.
      *
@@ -56,4 +63,6 @@ public interface ElementAction {
      * @return true if the element's text matches the expected text, false otherwise.
      */
     boolean assertElementTextFrame(FrameLocator frameLocator, String element, String key, String expectedText);
+
+    List<ElementHandle> getElementHandleList(Page page, String element, String key, FrameLocator frameLocator);
 }

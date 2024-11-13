@@ -43,3 +43,4 @@ elements:
     SiteMapPage: "Label_Site Map"
     CorporateInformation: "LinkText_Corporate Information"
     CorporateInformationPage: "Heading_Corporate Information"
+    list_of_element: "CSS_div.field-wrap.field-wrap--stacked"

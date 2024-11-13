@@ -1,5 +1,6 @@
 package com.ptaf.action_performer;
 
+import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.FrameLocator;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -9,6 +10,9 @@ import com.ptaf.interfaces.ElementAction;
 import com.ptaf.page_helper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ElementActionImpl is an implementation of the ElementAction interface that provides methods for
@@ -69,31 +73,42 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
     }
 
     /**
-     * Internal method for performing actions on either a Page or FrameLocator.
+     * Retrieves a list of element handles based on a specified element located within a Page context,
+     * and returns a boolean indicating if any matching elements were found.
      *
-     * @param page          The Page object (if applicable).
-     * @param action        The action to perform.
-     * @param element       The identifier for the target element.
-     * @param key           Additional identifier key for locating the element.
-     * @param value         The value associated with the action (if applicable).
-     * @param frameLocator   The FrameLocator (if applicable).
-     * @return boolean indicating success or failure of the action.
+     * @param page    The Playwright Page instance on which to locate the element.
+     * @param element The identifier for the target element.
+     * @param key     An additional key used to assist in locating the element.
+     * @return boolean indicating whether one or more element handles were located on the Page.
      */
-    private boolean performAction(Page page, String action, String element, String key, String value, FrameLocator frameLocator) {
-        try {
-            // Determine the correct Locator based on the context (Page or Frame)
-            Locator targetLocator = (page != null)
-                    ? getLocatorBasedOnPage(page, element, key)
-                    : getLocatorBasedOnFrame(frameLocator, element, key);
-            actionPerformer.waitForLocator(targetLocator); // Ensure the Locator is ready before performing actions
-            actionPerformer.performAction(action, targetLocator, value); // Execute the action using ActionPerformer
-            return true; // Action was successful
-        } catch (Exception e) {
-            // Log the error details and return false to indicate failure
-            logger.error("Error while performing action '{}' on element '{}'", action, element, e);
-            return false;
-        }
+    @Override
+    public boolean getElementHandlePage(Page page, String element, String key) {
+        // Use the getElementHandleList method to retrieve all ElementHandles matching the specified element in the Page context
+        List<ElementHandle> elementHandles = getElementHandleList(page, element, key, null);
+
+        // Returns true if element handles were found; otherwise, returns false
+        return !elementHandles.isEmpty();
     }
+
+    /**
+     * Retrieves a list of element handles based on a specified element located within a Frame context,
+     * and returns a boolean indicating if any matching elements were found.
+     *
+     * @param frameLocator The FrameLocator instance for identifying the frame containing the target element.
+     * @param element      The identifier for the target element within the frame.
+     * @param key          An additional key used to assist in locating the element.
+     * @return boolean indicating whether one or more element handles were located within the specified frame.
+     */
+    @Override
+    public boolean getElementHandleFrame(FrameLocator frameLocator, String element, String key) {
+        // Use the getElementHandleList method to retrieve all ElementHandles matching the specified element in the Frame context
+        List<ElementHandle> elementHandles = getElementHandleList(null, element, key, frameLocator);
+
+        // Returns true if element handles were found; otherwise, returns false
+        return !elementHandles.isEmpty();
+}
+
+
 
     /**
      * Asserts that the text content of an element on the current Page matches the expected text.
@@ -121,6 +136,33 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
     @Override
     public boolean assertElementTextFrame(FrameLocator frameLocator, String element, String key, String expectedText) {
         return assertElementText(null, element, key, expectedText, frameLocator); // Delegates with null page
+    }
+
+    /**
+     * Internal method for performing actions on either a Page or FrameLocator.
+     *
+     * @param page          The Page object (if applicable).
+     * @param action        The action to perform.
+     * @param element       The identifier for the target element.
+     * @param key           Additional identifier key for locating the element.
+     * @param value         The value associated with the action (if applicable).
+     * @param frameLocator   The FrameLocator (if applicable).
+     * @return boolean indicating success or failure of the action.
+     */
+    private boolean performAction(Page page, String action, String element, String key, String value, FrameLocator frameLocator) {
+        try {
+            // Determine the correct Locator based on the context (Page or Frame)
+            Locator targetLocator = (page != null)
+                    ? getLocatorBasedOnPage(page, element, key)
+                    : getLocatorBasedOnFrame(frameLocator, element, key);
+            actionPerformer.waitForLocator(targetLocator); // Ensure the Locator is ready before performing actions
+            actionPerformer.performAction(action, targetLocator, value); // Execute the action using ActionPerformer
+            return true; // Action was successful
+        } catch (Exception e) {
+            // Log the error details and return false to indicate failure
+            logger.error("Error while performing action '{}' on element '{}'", action, element, e);
+            return false;
+        }
     }
 
     /**
@@ -154,6 +196,34 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
             logger.error("Error while asserting text on element '{}'", element, e);
             return false;
         }
+    }
+
+    /**
+     * Retrieves a list of ElementHandles for a given element, considering page and frame contexts.
+     *
+     * @param page          The Page object (if applicable).
+     * @param element       The identifier for the target element.
+     * @param key           Additional identifier key for locating the element.
+     * @param frameLocator  The FrameLocator (if applicable).
+     * @return List<ElementHandle> containing the element handles, or an empty list if not found.
+     */
+    @Override
+    public List<ElementHandle> getElementHandleList(Page page, String element, String key, FrameLocator frameLocator) {
+        List<ElementHandle> elementHandles = new ArrayList<>();
+        try {
+            Locator targetLocator = (page != null)
+                    ? getLocatorBasedOnPage(page, element, key)
+                    : getLocatorBasedOnFrame(frameLocator, element, key);
+
+            if (targetLocator != null) {
+                elementHandles = targetLocator.elementHandles();
+            } else {
+                logger.error("Target locator for element '{}' could not be determined.", element);
+            }
+        } catch (Exception e) {
+            logger.error("Failed to retrieve element handles for '{}'", element, e);
+        }
+        return elementHandles;
     }
 
     /**
