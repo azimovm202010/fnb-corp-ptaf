@@ -157,9 +157,10 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
      * @return boolean indicating success or failure of the action.
      */
     private boolean performAction(Page page, String iFrame, String action, String element, String key, String value, FrameLocator frameLocator) {
+        Locator targetLocator = null;
+
+        // Determine the correct Locator based on the context (Page, FrameLocator, or Page with iframe)
         try {
-            // Determine the correct Locator based on the context (Page, FrameLocator, or Page with iframe)
-            Locator targetLocator;
             if (page != null && iFrame == null) {
                 targetLocator = getLocatorBasedOnPage(page, element, key);
             } else if (frameLocator != null) {
@@ -170,18 +171,26 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
                 throw new IllegalArgumentException("Both page and frameLocator cannot be null.");
             }
 
+            if (targetLocator == null) {
+                throw new IllegalStateException("Failed to resolve a target Locator.");
+            }
+
             // Ensure the Locator is ready before performing actions
             actionPerformer.waitForLocator(targetLocator);
 
             // Execute the action using ActionPerformer
             actionPerformer.performAction(action, targetLocator, value);
-
             return true; // Action was successful
+        } catch (IllegalArgumentException e) {
+            logger.error("Invalid argument provided: {}", e.getMessage());
+        } catch (IllegalStateException e) {
+            logger.error("Locator resolution error: {}", e.getMessage());
         } catch (Exception e) {
-            // Log the error details and return false to indicate failure
+            // Log other errors and return false to indicate failure
             logger.error("Error while performing action '{}' on element '{}'", action, element, e);
-            return false;
         }
+
+        return false; // Indicate action failed
     }
 
 
