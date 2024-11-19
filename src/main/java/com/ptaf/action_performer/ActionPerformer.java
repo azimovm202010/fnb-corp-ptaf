@@ -227,8 +227,8 @@ public class ActionPerformer {
             }
         } catch (Exception e) {
             // Logs the error and throws a runtime exception
-            logger.error("Error while performing action: {}", e.getMessage());
-            throw new RuntimeException("Action failed: " + e.getMessage(), e);
+            logger.error("Error while performing action: {} for Target Locator " + targetLocator, e.getMessage());
+            throw new RuntimeException("Action failed: for Target Locator " + targetLocator + e.getMessage(), e);
         }
     }
 

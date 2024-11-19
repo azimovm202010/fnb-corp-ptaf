@@ -8,7 +8,7 @@ elements:
     freestyle_account: "LinkText_Freestyle Checking Freestyle"
     lifestyle_account: "LinkText_Lifestyle Checking Lifestyle"
     premierstyle_account: "LinkText_Premierstyle Checking"
-    add_to_cart: "Button_Add To Cart"
+    add_to_cart: "CSS_button[alt='Add To Cart']"
     cart_proceed_to_check: "XPATH_//span[text()[normalize-space()='Proceed to Checkout']]"
     apply_now_check: "XPATH_//input[@value='Apply Now']"
     checkout_btn: "XPATH_(//button[text()[normalize-space()='Checkout']])[1]"

@@ -9,7 +9,7 @@ import com.microsoft.playwright.options.AriaRole;
  * LocatorHandler provides methods for retrieving Locators based on various locator types
  * from a given Playwright Page or FrameLocator. It serves as a utility class for abstraction
  * around how different types of elements are located within the UI.
- *
+ * <p>
  * Usage:
  * - Use the getLocatorForType method to obtain a Locator based on its type and context (Page or Frame).
  */
@@ -290,129 +290,137 @@ public class LocatorHandler {
     }
 
     public Locator getLocatorForTypeFrame(Page page, String iFrame, String locatorType, String locator) {
-        switch (locatorType.toUpperCase()) {
-            case "XPATH":
-            case "CSS":
-            case "TAG":
-                return page.frameLocator(iFrame).locator(locator); // Return Locator using CSS, TAG, or XPATH
-            case "BUTTON":
-                return page.frameLocator(iFrame).getByRole(AriaRole.BUTTON, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "LINKTEXT":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.LINK, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "OPTION":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.OPTION, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "TEXTBOX":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.TEXTBOX, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "CHECKBOX":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.CHECKBOX, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "RADIOBUTTON":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.RADIO, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "DROPDOWN":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.COMBOBOX, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "IMAGE":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.IMG, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "HEADING":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.HEADING, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "TAB":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.TAB, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "LIST":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.LIST, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "LISTITEM":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.LISTITEM, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "TABLE":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.TABLE, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "ROW":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.ROW, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "CELL":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.CELL, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "SLIDER":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.SLIDER, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "SPINBUTTON":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.SPINBUTTON, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "PROGRESSBAR":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.PROGRESSBAR, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "ALERT":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.ALERT, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "ALERTDIALOG":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.ALERTDIALOG, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "DIALOG":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.DIALOG, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "NAVIGATION":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.NAVIGATION, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "MENU":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.MENU, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "MENUITEM":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.MENUITEM, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "MENUITEMCHECKBOX":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.MENUITEMCHECKBOX, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "MENUITEMRADIO":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.MENUITEMRADIO, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "TREE":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.TREE, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "TREEITEM":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.TREEITEM, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "GRID":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.GRID, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "GRIDCELL":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.GRIDCELL, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "SEPARATOR":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.SEPARATOR, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "SWITCH":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.SWITCH, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "STATUS":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.STATUS, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "BANNER":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.BANNER, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "FOOTER":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.CONTENTINFO, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "MAIN":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.MAIN, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "COMPLEMENTARY":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.COMPLEMENTARY, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "REGION":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.REGION, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "ARTICLE":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.ARTICLE, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "FORM":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.FORM, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "LOG":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.LOG, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "MARQUEE":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.MARQUEE, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "TIMER":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.TIMER, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "TOOLTIP":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.TOOLTIP, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "TOOLBAR":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.TOOLBAR, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "PRESENTATION":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.PRESENTATION, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "FIGURE":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.FIGURE, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "CONTENTINFO":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.CONTENTINFO, new FrameLocator.GetByRoleOptions().setName(locator));
-            case "TEXT":
-                return page.locator(iFrame).contentFrame().getByText(locator);
-            case "ROLE":
-                return page.locator(iFrame).contentFrame().getByRole(AriaRole.valueOf(locator));
-            case "ALTTEXT":
-                return page.locator(iFrame).contentFrame().getByAltText(locator);
-            case "TITLE":
-                return page.locator(iFrame).contentFrame().getByTitle(locator);
-            case "PLACEHOLDER":
-                return page.locator(iFrame).contentFrame().getByPlaceholder(locator);
-            case "LABEL":
-                return page.locator(iFrame).contentFrame().getByLabel(locator);
-            case "TESTID":
-                return page.locator(iFrame).contentFrame().getByTestId(locator);
-            case "ID":
-                return page.locator(iFrame).contentFrame().locator("#" + locator);
-            case "NAME":
-                return page.locator(iFrame).contentFrame().locator("[name='" + locator + "']");
-            case "CLASS":
-                return page.locator(iFrame).contentFrame().locator("." + locator);
-            default:
-                throw new IllegalArgumentException("Unknown locator type: " + locatorType); // Handle unknown locator types in frame
+        try {
+            switch (locatorType.toUpperCase()) {
+                case "XPATH":
+                case "CSS":
+                case "TAG":
+                    return page.locator(iFrame).contentFrame().locator(locator); // Return Locator using CSS, TAG, or XPATH from the Page
+                case "BUTTON":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.BUTTON, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "LINKTEXT":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.LINK, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "OPTION":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.OPTION, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "TEXTBOX":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TEXTBOX, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "CHECKBOX":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.CHECKBOX, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "RADIOBUTTON":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.RADIO, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "DROPDOWN":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.COMBOBOX, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "IMAGE":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.IMG, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "HEADING":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.HEADING, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "TAB":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TAB, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "LIST":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.LIST, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "LISTITEM":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.LISTITEM, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "TABLE":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TABLE, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "ROW":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.ROW, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "CELL":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.CELL, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "SLIDER":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.SLIDER, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "SPINBUTTON":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.SPINBUTTON, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "PROGRESSBAR":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.PROGRESSBAR, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "ALERT":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.ALERT, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "ALERTDIALOG":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.ALERTDIALOG, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "DIALOG":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.DIALOG, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "NAVIGATION":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.NAVIGATION, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "MENU":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.MENU, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "MENUITEM":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.MENUITEM, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "MENUITEMCHECKBOX":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.MENUITEMCHECKBOX, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "MENUITEMRADIO":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.MENUITEMRADIO, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "TREE":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TREE, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "TREEITEM":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TREEITEM, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "GRID":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.GRID, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "GRIDCELL":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.GRIDCELL, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "SEPARATOR":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.SEPARATOR, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "SWITCH":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.SWITCH, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "STATUS":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.STATUS, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "BANNER":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.BANNER, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "FOOTER":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.CONTENTINFO, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "MAIN":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.MAIN, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "COMPLEMENTARY":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.COMPLEMENTARY, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "REGION":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.REGION, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "ARTICLE":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.ARTICLE, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "FORM":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.FORM, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "LOG":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.LOG, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "MARQUEE":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.MARQUEE, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "TIMER":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TIMER, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "TOOLTIP":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TOOLTIP, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "TOOLBAR":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TOOLBAR, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "PRESENTATION":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.PRESENTATION, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "FIGURE":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.FIGURE, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "CONTENTINFO":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.CONTENTINFO, new FrameLocator.GetByRoleOptions().setName(locator));
+                case "TEXT":
+                    return page.locator(iFrame).contentFrame().getByText(locator);
+                case "ROLE":
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.valueOf(locator));
+                case "ALTTEXT":
+                    return page.locator(iFrame).contentFrame().getByAltText(locator);
+                case "TITLE":
+                    return page.locator(iFrame).contentFrame().getByTitle(locator);
+                case "PLACEHOLDER":
+                    return page.locator(iFrame).contentFrame().getByPlaceholder(locator);
+                case "LABEL":
+                    return page.locator(iFrame).contentFrame().getByLabel(locator);
+                case "TESTID":
+                    return page.locator(iFrame).contentFrame().getByTestId(locator);
+                case "ID":
+                    return page.locator(iFrame).contentFrame().locator("#" + locator);
+                case "NAME":
+                    return page.locator(iFrame).contentFrame().locator("[name='" + locator + "']");
+                case "CLASS":
+                    return page.locator(iFrame).contentFrame().locator("." + locator);
+                default:
+                    throw new IllegalArgumentException("Unknown locator type for Page: " + locatorType);
+            }
+        } catch (Exception e) {
+            // Log the failure to find a locator in the page
+            System.out.println("Locator not found on the page: " + e.getMessage());
         }
+
+        // If neither the page nor the frame locator was successful, throw an exception
+        throw new IllegalArgumentException("Locator not found for type: " + locatorType + " with name: " + locator);
     }
 }

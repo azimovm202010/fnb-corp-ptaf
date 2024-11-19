@@ -187,7 +187,7 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
             logger.error("Locator resolution error: {}", e.getMessage());
         } catch (Exception e) {
             // Log other errors and return false to indicate failure
-            logger.error("Error while performing action '{}' on element '{}'", action, element, e);
+            logger.error("Error while performing action '{}' on TargetLocator '{}'", action, targetLocator, e);
         }
 
         return false; // Indicate action failed
@@ -311,7 +311,9 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
                 throw new IllegalArgumentException("Both page and frameLocator cannot be null");
 
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Failed to get locator for context: " + (page != null ? "Page" : "Frame"), e);
+            throw new RuntimeException("Failed to get locator for: " + (page != null ? "Page" : "Frame") + " LocatorType "
+                    + locatorType + " Locator " + locator + " Locator Value " + locatorValue,   e);
+
         }
     }
 

@@ -150,6 +150,13 @@ public class PageCommonSteps {
 
     @And("^we wait for some time$")
     public void weWaitForSomeTime() throws InterruptedException {
-        Thread.sleep(5000);
+        Thread.sleep(3000);
+    }
+
+    @Then("^Stop Execution")
+    public void stopExecution() throws Exception
+    {
+        Thread.sleep(30000);
+
     }
 }
