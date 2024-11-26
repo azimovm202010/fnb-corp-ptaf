@@ -36,6 +36,24 @@ public class ScenarioUtil {
             logger.error("Error taking screenshot: {}", e.getMessage(), e);
         }
     }
+
+    public static void handleScenarioTeardown(Scenario scenario, FrameLocator frameLocator, String status) {
+        try {
+            // Wait for the frame content to be stable before taking a screenshot
+            frameLocator.locator("#body").waitFor();
+
+            // Capture a screenshot of the frame and store it in a byte array
+            byte[] screenshot = frameLocator.locator("#body").screenshot();
+
+            // Attach the screenshot to the scenario report, with a descriptive name
+            scenario.attach(screenshot, "image/png", "Screenshot of the " + status + ": " + scenario.getName());
+            logger.info("Screenshot taken for {} scenario: {}", status, scenario.getName());  // Log info about the screenshot
+        } catch (Exception e) {
+            // Log any errors that occur during the screenshot capturing process
+            logger.error("Error taking screenshot: {}", e.getMessage(), e);
+        }
+    }
+
 //    public static void handleScenarioTeardown(Scenario scenario, Page page, String status, String iFrameSelector) {
 //        try {
 //            // Capture a full-page screenshot and store it in a byte array
