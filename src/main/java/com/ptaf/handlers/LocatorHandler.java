@@ -289,6 +289,435 @@ public class LocatorHandler {
         }
     }
 
+    public Locator getLocatorForTypePage_iFrameOrFrame(Page  page, String iFrame, String locatorType, FrameLocator frame, String locator) {
+        switch (locatorType.toUpperCase()) {
+            case "XPATH":
+            case "CSS":
+            case "TAG":
+                if (frame != null) {
+                    return frame.locator(locator); // Return Locator using CSS, TAG, or XPATH
+                }
+                if (page != null){
+                    return page.locator(iFrame).contentFrame().locator(locator);
+                }
+            case "BUTTON":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.BUTTON, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.BUTTON, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "LINKTEXT":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.LINK, new FrameLocator.GetByRoleOptions().setName(locator)).first();
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.LINK, new FrameLocator.GetByRoleOptions().setName(locator)).first();
+                }
+            case "OPTION":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.OPTION, new FrameLocator.GetByRoleOptions().setName(locator).setExact(true));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.OPTION, new FrameLocator.GetByRoleOptions().setName(locator).setExact(true));
+                }
+            case "TEXTBOX":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.TEXTBOX, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TEXTBOX, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "CHECKBOX":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.CHECKBOX, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.CHECKBOX, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "RADIOBUTTON":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.RADIO, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.RADIO, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "DROPDOWN":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.COMBOBOX, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.COMBOBOX, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "IMAGE":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.IMG, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.IMG, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "HEADING":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.HEADING, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.HEADING, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "TAB":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.TAB, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TAB, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "LIST":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.LIST, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.LIST, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "LISTITEM":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.LISTITEM, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.LISTITEM, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "TABLE":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.TABLE, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TABLE, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "ROW":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.ROW, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.ROW, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "CELL":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.CELL, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.CELL, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "BUTTONSUBMIT":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.BUTTON, new FrameLocator.GetByRoleOptions().setName(locator).setPressed(true));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.BUTTON, new FrameLocator.GetByRoleOptions().setName(locator).setPressed(true));
+                }
+            case "SLIDER":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.SLIDER, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.SLIDER, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "SPINBUTTON":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.SPINBUTTON, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.SPINBUTTON, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "PROGRESSBAR":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.PROGRESSBAR, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.PROGRESSBAR, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "ALERT":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.ALERT, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.ALERT, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "ALERTDIALOG":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.ALERTDIALOG, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.ALERTDIALOG, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "DIALOG":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.DIALOG, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.DIALOG, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "NAVIGATION":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.NAVIGATION, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.NAVIGATION, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "MENU":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.MENU, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.MENU, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "MENUITEM":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.MENUITEM, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.MENUITEM, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "MENUITEMCHECKBOX":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.MENUITEMCHECKBOX, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.MENUITEMCHECKBOX, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "MENUITEMRADIO":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.MENUITEMRADIO, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.MENUITEMRADIO, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "TREE":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.TREE, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TREE, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "TREEITEM":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.TREEITEM, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TREEITEM, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "GRID":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.GRID, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.GRID, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "GRIDCELL":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.GRIDCELL, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.GRIDCELL, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "SEPARATOR":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.SEPARATOR, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.SEPARATOR, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "SWITCH":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.SWITCH, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.SWITCH, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "STATUS":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.STATUS, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.STATUS, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "BANNER":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.BANNER, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.BANNER, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "FOOTER":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.CONTENTINFO, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.CONTENTINFO, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "MAIN":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.MAIN, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.MAIN, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "COMPLEMENTARY":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.COMPLEMENTARY, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.COMPLEMENTARY, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "REGION":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.REGION, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.REGION, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "ARTICLE":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.ARTICLE, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.ARTICLE, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "FORM":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.FORM, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.FORM, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "LOG":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.LOG, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.LOG, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "MARQUEE":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.MARQUEE, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.MARQUEE, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "TIMER":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.TIMER, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TIMER, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "TOOLTIP":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.TOOLTIP, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TOOLTIP, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "TOOLBAR":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.TOOLBAR, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.TOOLBAR, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "PRESENTATION":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.PRESENTATION, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.PRESENTATION, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "FIGURE":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.FIGURE, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.FIGURE, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "CONTENTINFO":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.CONTENTINFO, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.CONTENTINFO, new FrameLocator.GetByRoleOptions().setName(locator));
+                }
+            case "TEXT":
+                if (frame != null) {
+                    return frame.getByText(locator);
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByText(locator);
+                }
+            case "ROLE":
+                if (frame != null) {
+                    return frame.getByRole(AriaRole.valueOf(locator));
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByRole(AriaRole.valueOf(locator));
+                }
+            case "ALTTEXT":
+                if (frame != null) {
+                    return frame.getByAltText(locator);
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByAltText(locator);
+                }
+            case "TITLE":
+                if (frame != null) {
+                    return frame.getByTitle(locator);
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByTitle(locator);
+                }
+            case "PLACEHOLDER":
+                if (frame != null) {
+                    return frame.getByPlaceholder(locator);
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByPlaceholder(locator);
+                }
+            case "LABEL":
+                if (frame != null) {
+                    return frame.getByLabel(locator);
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByLabel(locator);
+                }
+            case "TESTID":
+                if (frame != null) {
+                    return frame.getByTestId(locator);
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().getByTestId(locator);
+                }
+            case "ID":
+                if (frame != null) {
+                    return frame.locator("#" + locator);
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().locator("#" + locator);
+                }
+            case "NAME":
+                if (frame != null) {
+                    return frame.locator("[name='" + locator + "']");
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().locator("[name='" + locator + "']");
+                }
+            case "CLASS":
+                if (frame != null) {
+                    return frame.locator("." + locator);
+                }
+                if (page != null) {
+                    return page.locator(iFrame).contentFrame().locator("." + locator);
+                }
+            default:
+                throw new IllegalArgumentException("Unknown locator type: " + locatorType); // Handle unknown locator types in frame
+        }
+    }
+
     public Locator getLocatorForTypeFrame(Page page, String iFrame, String locatorType, String locator) {
         try {
             switch (locatorType.toUpperCase()) {
