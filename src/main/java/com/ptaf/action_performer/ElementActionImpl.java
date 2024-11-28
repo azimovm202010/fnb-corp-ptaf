@@ -54,7 +54,7 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
      */
     @Override
     public boolean performActionPage(Page page, String action, String element, String key, String value) {
-        return performAction(page, null, action, element, key, value, null); // Delegates to private method with null frame
+        return performAction(page, null, null, null, action, element, key, value, null); // Delegates to private method with null frame
     }
 
     /**
@@ -69,13 +69,13 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
      */
     @Override
     public boolean performActionFrame(FrameLocator frameLocator, String action, String element, String key, String value) {
-        return performAction(null, null, action, element, key, value, frameLocator); // Delegates with null page
+        return performAction(null, null, null, null, action, element, key, value, frameLocator); // Delegates with null page
     }
 
 
     @Override
-    public boolean performActionPageFrame(Page page, String iFrame, String action, String element, String key, String value, FrameLocator frameLocator) {
-        return performAction(page, iFrame, action, element, key, value, null);
+    public boolean performActionPageFrame(Page page, String iFrame, String iFrame_2, String iFrame_3, String action, String element, String key, String value, FrameLocator frameLocator) {
+        return performAction(page, iFrame, iFrame_2, iFrame_3, action, element, key, value, null);
     }
 
 
@@ -156,7 +156,7 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
      * @param frameLocator The FrameLocator (if applicable).
      * @return boolean indicating success or failure of the action.
      */
-    private boolean performAction(Page page, String iFrame, String action, String element, String key, String value, FrameLocator frameLocator) {
+    private boolean performAction(Page page, String iFrame, String iFrame_2, String iFrame_3, String action, String element, String key, String value, FrameLocator frameLocator) {
         Locator targetLocator = null;
 
         // Determine the correct Locator based on the context (Page, FrameLocator, or Page with iframe)
@@ -166,7 +166,7 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
             } else if (frameLocator != null) {
                 targetLocator = getLocatorBasedOnFrame(frameLocator, element, key);
             } else if (page != null) {
-                targetLocator = getLocatorBasedOnPageFrame(page, iFrame, element, key);
+                targetLocator = getLocatorBasedOnPageFrame(page, iFrame, iFrame_2, iFrame_3, element, key);
             } else {
                 throw new IllegalArgumentException("Both page and frameLocator cannot be null.");
             }
@@ -264,11 +264,11 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
      * @return The Locator for the identified element.
      */
     private Locator getLocatorBasedOnPage(Page page, String element, String key) {
-        return getLocator(null, element, key, page, null);
+        return getLocator(null, null, null, element, key, page, null);
     }
 
-    private Locator getLocatorBasedOnPageFrame(Page page, String iFrame, String element, String key) {
-        return getLocator(iFrame, element, key, page, null);
+    private Locator getLocatorBasedOnPageFrame(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String key) {
+        return getLocator(iFrame, iFrame_2, iFrame_3, element, key, page, null);
     }
 
     /**
@@ -280,7 +280,7 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
      * @return The Locator for the identified element.
      */
     private Locator getLocatorBasedOnFrame(FrameLocator frameLocator, String element, String key) {
-        return getLocator(null, element, key, null, frameLocator);
+        return getLocator(null, null, null, element, key, null, frameLocator);
     }
 
     /**
@@ -293,7 +293,7 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
      * @return The Locator for the identified element.
      * @throws RuntimeException If the context (Page or Frame) is unknown.
      */
-    private Locator getLocator(String iFrame, String element, String key, Page page, FrameLocator frameLocator) {
+    private Locator getLocator(String iFrame, String iFrame_2, String iFrame_3, String element, String key, Page page, FrameLocator frameLocator) {
         String locatorValue = elementLocatorHelper.getElement(element, key); // Get the locator value based on the element and key
         String locatorType = elementLocatorHelper.getLocatorType(locatorValue); // Get the locator type (e.g., ID, class)
         String locator = elementLocatorHelper.getLocator(locatorValue); // Extract the locator string
@@ -305,7 +305,7 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
             } else if (frameLocator != null) {
                 return locatorHandler.getLocatorForType(locatorType, frameLocator, locator);
             } else if (page != null) {
-                return locatorHandler.getLocatorForTypeFrame(page, iFrame, locatorType, locator);
+                return locatorHandler.getLocatorForTypeFrame(page, iFrame, iFrame_2, iFrame_3, locatorType, locator);
             }
                 // If both page and frameLocator are null, handle the unknown context case
                 throw new IllegalArgumentException("Both page and frameLocator cannot be null");

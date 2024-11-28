@@ -39,7 +39,7 @@ public interface ElementAction {
     boolean performActionFrame(FrameLocator frameLocator, String action, String element, String key, String value);
 
 
-    boolean performActionPageFrame(Page page, String iFrame, String action, String element, String key, String value, FrameLocator frameLocator);
+    boolean performActionPageFrame(Page page, String iFrame, String iFrame_2, String iFrame_3, String action, String element, String key, String value, FrameLocator frameLocator);
 
     boolean getElementHandlePage(Page page, String element, String key);
 
