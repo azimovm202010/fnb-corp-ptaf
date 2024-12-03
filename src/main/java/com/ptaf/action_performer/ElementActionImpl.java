@@ -1,16 +1,16 @@
 package com.ptaf.action_performer;
 
-import com.microsoft.playwright.ElementHandle;
-import com.microsoft.playwright.FrameLocator;
-import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
+import com.microsoft.playwright.*;
+import com.microsoft.playwright.options.AriaRole;
 import com.ptaf.handlers.LocatorHandler;
 import com.ptaf.helpers.ElementLocatorHelper;
 import com.ptaf.interfaces.ElementAction;
 import com.ptaf.page_helper.PageHelper;
+import com.ptaf.utils.YamlReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -170,16 +170,13 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
             } else {
                 throw new IllegalArgumentException("Both page and frameLocator cannot be null.");
             }
-
             if (targetLocator == null) {
                 throw new IllegalStateException("Failed to resolve a target Locator.");
             }
-
             // Ensure the Locator is ready before performing actions
             actionPerformer.waitForLocator(targetLocator);
-
             // Execute the action using ActionPerformer
-            actionPerformer.performAction(action, targetLocator, value);
+            actionPerformer.performAction(page, action, targetLocator, value);
             return true; // Action was successful
         } catch (IllegalArgumentException e) {
             logger.error("Invalid argument provided: {}", e.getMessage());
@@ -193,6 +190,46 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
         return false; // Indicate action failed
     }
 
+    @Override
+    public void uploadFile(Page page, String file_name,String element, String key) {
+        // Wait for the file chooser dialog to appear and upload a file using the specified element
+        FileChooser fileChooser = page.waitForFileChooser(() ->
+                page.click(getElement(element, key)));
+        fileChooser.setFiles(Paths.get(getElement(element, file_name)));
+    }
+
+    @Override
+    public void clickOnDocumentLinkName(Page page, String element, String key) {
+        String documentLinkName = getElement(element, key);
+        String fileName = extractFileName(documentLinkName);
+        System.out.println(fileName);
+        try {
+            // Click the link by its ARIA role and name using the retrieved selector
+            page.getByRole(AriaRole.LINK,
+                    new Page.GetByRoleOptions().setName(fileName)).click();
+        } catch (Exception e) {
+            // Log any exceptions that occur during the role-based click operation
+            logger.error("Failed to click on element by Role '{}'", element + key, e);
+        }
+    }
+
+    // Method to extract and return the file name from a given path
+    public static String extractFileName(String filePath) {
+        // Split the string based on the "/" delimiter
+        String[] parts = filePath.split("/");
+
+        // The last part of the array is the file name
+        return parts[parts.length - 1];
+    }
+
+    public String getElement(String element, String key) {
+        try {
+            return (String) YamlReader.get("elements." + element + "." + key);
+        } catch (Exception e) {
+            logger.error("Failed to retrieve selector for element '{}'", element + key, e);
+            throw e;
+        }
+    }
 
     /**
      * Internal method to assert the text content of an element, applicable to Page or Frame.
@@ -283,6 +320,8 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
         return getLocator(null, null, null, element, key, null, frameLocator);
     }
 
+
+
     /**
      * Retrieves a Locator for the specified element by determining its type and context.
      *
@@ -293,6 +332,8 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
      * @return The Locator for the identified element.
      * @throws RuntimeException If the context (Page or Frame) is unknown.
      */
+
+
     private Locator getLocator(String iFrame, String iFrame_2, String iFrame_3, String element, String key, Page page, FrameLocator frameLocator) {
         String locatorValue = elementLocatorHelper.getElement(element, key); // Get the locator value based on the element and key
         String locatorType = elementLocatorHelper.getLocatorType(locatorValue); // Get the locator type (e.g., ID, class)

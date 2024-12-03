@@ -67,5 +67,9 @@ public interface ElementAction {
      */
     boolean assertElementTextFrame(FrameLocator frameLocator, String element, String key, String expectedText);
 
+    void uploadFile(Page page, String file_name, String element, String key);
+
+    void clickOnDocumentLinkName(Page page, String element, String key);
+
     List<ElementHandle> getElementHandleList(Page page, String element, String key, FrameLocator frameLocator);
 }

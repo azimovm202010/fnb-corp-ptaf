@@ -1,6 +1,7 @@
 package com.ptaf.pages;
 
 import com.microsoft.playwright.ElementHandle;
+import com.microsoft.playwright.FileChooser;
 import com.ptaf.action_performer.ElementActionImpl;
 import com.ptaf.hooks.Hooks;
 import com.ptaf.interfaces.ElementAction;
@@ -11,6 +12,7 @@ import io.cucumber.java.Scenario;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -62,7 +64,7 @@ public class PageCommonMethods {
     /**
      * Clicks on a web element specified by the locator.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element being clicked.
      * @param locator The locator string used to identify the element.
      */
@@ -73,10 +75,10 @@ public class PageCommonMethods {
     /**
      * Fills an input field with the specified value.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element being filled.
      * @param locator The locator string used to identify the input element.
-     * @param value The value to be filled in the field.
+     * @param value   The value to be filled in the field.
      */
     public void fill(Page page, String element, String locator, String value) {
         performAction("fill", page, element, locator, value);
@@ -85,10 +87,10 @@ public class PageCommonMethods {
     /**
      * Selects an option from a dropdown based on the provided value.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the dropdown.
      * @param locator The locator string used to identify the dropdown.
-     * @param value The value of the option to be selected.
+     * @param value   The value of the option to be selected.
      */
     public void select(Page page, String element, String locator, String value) {
         performAction("select", page, element, locator, value);
@@ -97,7 +99,7 @@ public class PageCommonMethods {
     /**
      * Checks a checkbox element.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the checkbox.
      * @param locator The locator string used to identify the checkbox.
      */
@@ -108,7 +110,7 @@ public class PageCommonMethods {
     /**
      * Unchecks a checkbox element.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the checkbox.
      * @param locator The locator string used to identify the checkbox.
      */
@@ -119,7 +121,7 @@ public class PageCommonMethods {
     /**
      * Hovers over a specified element.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element to hover.
      * @param locator The locator string used to identify the element.
      */
@@ -130,10 +132,10 @@ public class PageCommonMethods {
     /**
      * Types a specified value into a designated input field.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element being typed into.
      * @param locator The locator string used to identify the input field.
-     * @param value The value to be typed into the field.
+     * @param value   The value to be typed into the field.
      */
     public void type(Page page, String element, String locator, String value) {
         performAction("type", page, element, locator, value);
@@ -142,10 +144,10 @@ public class PageCommonMethods {
     /**
      * Presses a specified key on the target element.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element on which the key will be pressed.
      * @param locator The locator string used to identify the element.
-     * @param value The key to be pressed.
+     * @param value   The key to be pressed.
      */
     public void press(Page page, String element, String locator, String value) {
         performAction("press", page, element, locator, value);
@@ -154,7 +156,7 @@ public class PageCommonMethods {
     /**
      * Double-clicks on the specified element.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element being double-clicked.
      * @param locator The locator string used to identify the element.
      */
@@ -165,10 +167,10 @@ public class PageCommonMethods {
     /**
      * Takes a screenshot of the specified element.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element to screenshot.
      * @param locator The locator string used to identify the element.
-     * @param value Additional parameters for screenshots, if any.
+     * @param value   Additional parameters for screenshots, if any.
      */
     public void screenshot(Page page, String element, String locator, String value) {
         performAction("screenshot", page, element, locator, value);
@@ -177,7 +179,7 @@ public class PageCommonMethods {
     /**
      * Scrolls the page to the specified element.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element to scroll to.
      * @param locator The locator string used to identify the element.
      */
@@ -188,7 +190,7 @@ public class PageCommonMethods {
     /**
      * Focuses on the specified element.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element to focus on.
      * @param locator The locator string used to identify the element.
      */
@@ -199,10 +201,10 @@ public class PageCommonMethods {
     /**
      * Removes focus from the specified element.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element to blur.
      * @param locator The locator string used to identify the element.
-     * @param value Additional parameters for blurring, if any.
+     * @param value   Additional parameters for blurring, if any.
      */
     public void blur(Page page, String element, String locator, String value) {
         performAction("blur", page, element, locator, value);
@@ -211,7 +213,7 @@ public class PageCommonMethods {
     /**
      * Clears the value of an input or element.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element to clear.
      * @param locator The locator string used to identify the element.
      */
@@ -222,7 +224,7 @@ public class PageCommonMethods {
     /**
      * Drags the specified element.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element to drag.
      * @param locator The locator string used to identify the element.
      */
@@ -233,7 +235,7 @@ public class PageCommonMethods {
     /**
      * Gets the text content of the specified element.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element to extract text from.
      * @param locator The locator string used to identify the element.
      */
@@ -244,7 +246,7 @@ public class PageCommonMethods {
     /**
      * Checks whether the given element is visible on the page.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element to check visibility.
      * @param locator The locator string used to identify the element.
      */
@@ -255,7 +257,7 @@ public class PageCommonMethods {
     /**
      * Checks if the given element is enabled.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element to check.
      * @param locator The locator string used to identify the element.
      */
@@ -266,7 +268,7 @@ public class PageCommonMethods {
     /**
      * Checks if the specified checkbox is currently checked.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the checkbox to check.
      * @param locator The locator string used to identify the checkbox.
      */
@@ -277,9 +279,9 @@ public class PageCommonMethods {
     /**
      * Asserts that the specified element contains the expected text.
      *
-     * @param page The current Playwright Page.
-     * @param element The logical name of the element being checked.
-     * @param locator The locator string used to identify the element.
+     * @param page         The current Playwright Page.
+     * @param element      The logical name of the element being checked.
+     * @param locator      The locator string used to identify the element.
      * @param expectedText The expected text that should be contained within the element.
      */
     public void contain(Page page, String element, String locator, String expectedText) {
@@ -294,7 +296,7 @@ public class PageCommonMethods {
     /**
      * Checks if the specified element exists on the page.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element to check.
      * @param locator The locator string used to identify the element.
      */
@@ -305,7 +307,7 @@ public class PageCommonMethods {
     /**
      * Right-clicks on the specified element.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element being right-clicked.
      * @param locator The locator string used to identify the element.
      */
@@ -316,7 +318,7 @@ public class PageCommonMethods {
     /**
      * Taps on the specified element, primarily for mobile scenarios.
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element being tapped.
      * @param locator The locator string used to identify the element.
      */
@@ -327,10 +329,10 @@ public class PageCommonMethods {
     /**
      * Uploads a file to a designated input element (type=file).
      *
-     * @param page The current Playwright Page.
+     * @param page    The current Playwright Page.
      * @param element The logical name of the file input.
      * @param locator The locator string used to identify the input.
-     * @param value The path to the file to be uploaded.
+     * @param value   The path to the file to be uploaded.
      */
     public void uploadFile(Page page, String element, String locator, String value) {
         performAction("uploadfile", page, element, locator, value);
@@ -384,7 +386,7 @@ public class PageCommonMethods {
         performAction("input", page, element, locator, value);
     }
 
-    public void selectFile(Page page, String element, String locator, String value){
+    public void selectFile(Page page, String element, String locator, String value) {
         performAction("selectfile", page, element, locator, value);
     }
 
@@ -404,15 +406,22 @@ public class PageCommonMethods {
         performAction("isempty", page, element, locator, null);
     }
 
+    public void file_chooser_for_upload(Page page, String fileName, String element, String locator) {
+        elementAction.uploadFile(page, fileName, element, locator);
+    }
+
+    public void click_document_link(Page page, String element, String locator) {
+        elementAction.clickOnDocumentLinkName(page, element, locator);
+    }
     /**
      * Centralized method to perform actions on elements,
      * managing success and failure scenarios.
      *
-     * @param action The action to perform (e.g., "click", "fill").
-     * @param page The current Playwright Page.
+     * @param action  The action to perform (e.g., "click", "fill").
+     * @param page    The current Playwright Page.
      * @param element The logical name of the element involved in the action.
      * @param locator The locator string used to identify the element.
-     * @param value Any additional value needed for the action, if required.
+     * @param value   Any additional value needed for the action, if required.
      */
     private void performAction(String action, Page page, String element, String locator, String value) {
         executeStep(() -> {
@@ -433,10 +442,10 @@ public class PageCommonMethods {
      * input fields or other value-bearing elements needs to be validated.
      * </p>
      *
-     * @param page The current Playwright Page instance used to interact with the browser.
+     * @param page    The current Playwright Page instance used to interact with the browser.
      * @param element The logical name of the element being checked, for logging purposes.
      * @param locator The locator string used to identify the element on the page.
-     * @param value The expected value that the element should have.
+     * @param value   The expected value that the element should have.
      */
     public void hasvalue(Page page, String element, String locator, String value) {
         performAction("hasvalue", page, element, locator, value); // Executes the action to check the value
@@ -452,21 +461,22 @@ public class PageCommonMethods {
      * checked or stored for further verification.
      * </p>
      *
-     * @param page The current Playwright Page instance used to interact with the browser.
+     * @param page    The current Playwright Page instance used to interact with the browser.
      * @param element The logical name of the element whose value is being retrieved, for logging purposes.
      * @param locator The locator string used to identify the element on the page.
      */
     public void getvalue(Page page, String element, String locator) {
         performAction("getvalue", page, element, locator, null); // Executes the action to retrieve the value
     }
+
     /**
      * Retrieves and prints a list of elements on the specified page.
      * This method locates elements based on the provided element name and locator key,
      * and prints each located element's details for debugging or verification purposes.
      *
-     * @param page     The Playwright Page object representing the current browser page.
-     * @param element  The name of the element to locate, typically corresponding to a descriptive identifier.
-     * @param locator  The locator key, as specified in the YAML configuration, used to retrieve the element.
+     * @param page    The Playwright Page object representing the current browser page.
+     * @param element The name of the element to locate, typically corresponding to a descriptive identifier.
+     * @param locator The locator key, as specified in the YAML configuration, used to retrieve the element.
      */
     public void getListOfElements(Page page, String element, String locator) {
         // Retrieve a list of element handles matching the provided element and locator key on the page.
@@ -489,9 +499,9 @@ public class PageCommonMethods {
      * This method retrieves a list of element handles matching the provided element name and locator key,
      * then iterates through each radio button in the list until it finds an enabled one to click.
      *
-     * @param page     The Playwright Page object representing the current browser page.
-     * @param element  The name of the element to locate, typically corresponding to a descriptive identifier.
-     * @param locator  The locator key, as specified in the YAML configuration, used to retrieve the element.
+     * @param page    The Playwright Page object representing the current browser page.
+     * @param element The name of the element to locate, typically corresponding to a descriptive identifier.
+     * @param locator The locator key, as specified in the YAML configuration, used to retrieve the element.
      */
     public void clickRadioButton(Page page, String element, String locator) {
         // Retrieve a list of element handles matching the provided element and locator key on the page.
@@ -535,8 +545,8 @@ public class PageCommonMethods {
      * Handles a failure during execution by logging errors and
      * triggering cleanup measures.
      *
-     * @param page The current Playwright Page.
-     * @param action The action that failed.
+     * @param page    The current Playwright Page.
+     * @param action  The action that failed.
      * @param element The logical name of the element involved.
      */
     private void handleFailure(Page page, String action, String element) {

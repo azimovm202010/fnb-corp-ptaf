@@ -142,6 +142,16 @@ public class PageCommonSteps {
         pageCommonMethods.press(page, element, locator, value);
     }
 
+    @And("^we choose file then upload on page (.*?) locator (.*?) key \"(.*?)\" keyboard$")
+    public void weChooseFileThenUploadOnPageKey(String element, String fileName, String locator, String file_name) {
+        pageCommonMethods.file_chooser_for_upload(page, fileName, element, locator);
+    }
+
+    @And("^we click document link on page (.*?) locator (.*?) key \"(.*?)\" keyboard$")
+    public void weClickDocumentLinkOnPageKey(String element, String locator) {
+        pageCommonMethods.click_document_link(page, element, locator);
+    }
+
     @Given("^get title of page$")
     public void getTitleOfPage() {
         String title = page.title();
