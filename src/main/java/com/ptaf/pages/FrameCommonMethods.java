@@ -289,7 +289,7 @@ public class FrameCommonMethods {
 
     public void finalizeScenario() {
         if (isFailed) {
-            ScenarioUtil.handleScenarioTeardown(getCurrentScenario(), page, "Passed Step");
+            ScenarioUtil.handleScenarioTeardown(getCurrentScenario(), page, "Passed scenario");
         }
     }
 }
