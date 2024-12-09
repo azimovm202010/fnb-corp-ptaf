@@ -174,6 +174,7 @@ public class PageCommonMethods {
      */
     public void screenshot(Page page, String element, String locator, String value) {
         performAction("screenshot", page, element, locator, value);
+        finalizeScenarioScreenshot(page);
     }
 
     /**
@@ -604,6 +605,12 @@ public class PageCommonMethods {
      */
     public void finalizeScenario() {
         if (isFailed) {
+            // Handle the scenario teardown if a step has failed
+            ScenarioUtil.handleScenarioTeardown(getCurrentScenario(), page, "Passed Step");
+        }
+    }
+    public void finalizeScenarioScreenshot(Page page) {
+        if (!isFailed) {
             // Handle the scenario teardown if a step has failed
             ScenarioUtil.handleScenarioTeardown(getCurrentScenario(), page, "Passed Step");
         }

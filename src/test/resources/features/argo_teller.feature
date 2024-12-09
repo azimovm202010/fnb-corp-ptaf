@@ -18,6 +18,7 @@ Feature: Argo_Teller
     Given get title of page
     Then we click on second frame landing locator body
     Then we wait for some time
+    Then we capture screenshot on header frame landing locator body name "testing/testing_finalize"
     When we click on second frame landing locator general_ledger_btn
 #    Then we wait for some time
 #    Then we check on second frame general_ledger_page locator debit_radio_btn

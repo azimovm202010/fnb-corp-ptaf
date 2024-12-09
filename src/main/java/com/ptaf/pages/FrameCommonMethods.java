@@ -63,6 +63,7 @@ public class FrameCommonMethods {
 
     public void screenshot(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator, String value) {
         performAction("screenshot", page, iFrame, iFrame_2, iFrame_3, element, locator, value);
+        finalizeScenario(page);
     }
 
     public void scroll(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator) {
@@ -287,8 +288,8 @@ public class FrameCommonMethods {
         return Hooks.getCurrentScenario();
     }
 
-    public void finalizeScenario() {
-        if (isFailed) {
+    public void finalizeScenario(Page page) {
+        if (!isFailed) {
             ScenarioUtil.handleScenarioTeardown(getCurrentScenario(), page, "Passed scenario");
         }
     }
