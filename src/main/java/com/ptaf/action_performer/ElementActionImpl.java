@@ -333,8 +333,8 @@ public class ElementActionImpl extends PageHelper implements ElementAction {
      * @throws RuntimeException If the context (Page or Frame) is unknown.
      */
 
-
-    private Locator getLocator(String iFrame, String iFrame_2, String iFrame_3, String element, String key, Page page, FrameLocator frameLocator) {
+@Override
+    public Locator getLocator(String iFrame, String iFrame_2, String iFrame_3, String element, String key, Page page, FrameLocator frameLocator) {
         String locatorValue = elementLocatorHelper.getElement(element, key); // Get the locator value based on the element and key
         String locatorType = elementLocatorHelper.getLocatorType(locatorValue); // Get the locator type (e.g., ID, class)
         String locator = elementLocatorHelper.getLocator(locatorValue); // Extract the locator string

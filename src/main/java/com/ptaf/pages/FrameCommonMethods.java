@@ -196,7 +196,7 @@ public class FrameCommonMethods {
     }
 
     public void uncheckIfElementIsCheckedIfNotLeaveIsChecked(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator){
-        Locator elementLocator = page.frameLocator(iFrame).frameLocator(iFrame_2).frameLocator(iFrame_3).locator(locator);
+        Locator elementLocator = elementAction.getLocator(iFrame, iFrame_2, iFrame_3, element, locator, page, null);
 
         // Check if the element is checked
         boolean isChecked = elementLocator.isChecked();

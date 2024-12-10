@@ -2,6 +2,7 @@ package com.ptaf.interfaces;
 
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.FrameLocator;
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 
 import java.util.List;
@@ -72,4 +73,6 @@ public interface ElementAction {
     void clickOnDocumentLinkName(Page page, String element, String key);
 
     List<ElementHandle> getElementHandleList(Page page, String element, String key, FrameLocator frameLocator);
+
+    Locator getLocator(String iFrame, String iFrame_2, String iFrame_3, String element, String key, Page page, FrameLocator frameLocator);
 }
