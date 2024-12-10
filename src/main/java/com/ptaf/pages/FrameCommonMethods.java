@@ -1,6 +1,7 @@
 package com.ptaf.pages;
 
 import com.microsoft.playwright.ElementHandle;
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.ptaf.action_performer.ElementActionImpl;
 import com.ptaf.hooks.Hooks;
@@ -102,15 +103,6 @@ public class FrameCommonMethods {
         performAction("ischecked", page, iFrame, iFrame_2, iFrame_3, element, locator, null);
     }
 
-    public void contain(Page page, String iFrame, String element, String locator, String expectedText) {
-        executeStep(() -> {
-            boolean actionStatus = elementAction.assertElementTextPage(page, element, locator, expectedText);
-            if (!actionStatus) {
-                handleFailure(page, "contain", element);
-            }
-        });
-    }
-
     public void exists(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator) {
         performAction("exists", page, iFrame, iFrame_2, iFrame_3, element, locator, null);
     }
@@ -195,6 +187,39 @@ public class FrameCommonMethods {
         performAction("isempty", page, iFrame, iFrame_2, iFrame_3, element, locator, null);
     }
 
+    public void hasvalue(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator, String value) {
+        performAction("hasvalue", page, iFrame, iFrame_2, iFrame_3, element, locator, value);
+    }
+
+    public void getvalue(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator) {
+        performAction("getvalue", page, iFrame, iFrame_2, iFrame_3, element, locator, null);
+    }
+
+    public void uncheckIfElementIsCheckedIfNotLeaveIsChecked(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator){
+        Locator elementLocator = page.frameLocator(iFrame).frameLocator(iFrame_2).frameLocator(iFrame_3).locator(locator);
+
+        // Check if the element is checked
+        boolean isChecked = elementLocator.isChecked();
+
+        // Perform the appropriate action based on whether the element is checked
+        if (isChecked) {
+            // If checked, uncheck it using the performAction method
+            performAction("uncheck", page, iFrame, iFrame_2, iFrame_3, element, locator, null);
+        } else {
+            System.out.println("Element is not checked");
+        }
+
+    }
+
+    public void contain(Page page, String iFrame, String element, String locator, String expectedText) {
+        executeStep(() -> {
+            boolean actionStatus = elementAction.assertElementTextPage(page, element, locator, expectedText);
+            if (!actionStatus) {
+                handleFailure(page, "contain", element);
+            }
+        });
+    }
+
     private void performAction(String action, Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator, String value) {
         executeStep(() -> {
             boolean actionStatus = elementAction.performActionPageFrame(page, iFrame, iFrame_2, iFrame_3, action, element, locator, value, null);
@@ -202,14 +227,6 @@ public class FrameCommonMethods {
                 handleFailure(page, action, element);
             }
         });
-    }
-
-    public void hasvalue(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator, String value) {
-        performAction("hasvalue", page, iFrame, iFrame_2, iFrame_3, element, locator, value);
-    }
-
-    public void getvalue(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator) {
-        performAction("getvalue", page, iFrame, iFrame_2, iFrame_3, element, locator, null);
     }
 
     public void getListOfElements(Page page, String iFrame, String element, String locator) {
@@ -221,6 +238,20 @@ public class FrameCommonMethods {
             for (int i = 0; i < elements.size(); i++) {
                 ElementHandle handle = elements.get(i);
                 logger.info("Element " + (i + 1) + ": " + handle.toString());
+            }
+        }
+    }
+
+    public void uncheckRadioButton(Page page, String iFrame, String element, String locator) {
+        List<ElementHandle> elements = elementAction.getElementHandleList(page, element, locator, null);
+
+        for (ElementHandle radioButton : elements) {
+            if (radioButton.isEnabled()) {
+                radioButton.uncheck();
+                logger.info("Radio button clicked!");
+                break;
+            } else {
+                logger.info("Radio button is not enabled, moving to the next one.");
             }
         }
     }
