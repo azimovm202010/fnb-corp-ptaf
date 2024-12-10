@@ -195,20 +195,8 @@ public class FrameCommonMethods {
         performAction("getvalue", page, iFrame, iFrame_2, iFrame_3, element, locator, null);
     }
 
-    public void uncheckIfElementIsCheckedIfNotLeaveIsChecked(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator){
-        Locator elementLocator = elementAction.getLocator(iFrame, iFrame_2, iFrame_3, element, locator, page, null);
-
-        // Check if the element is checked
-        boolean isChecked = elementLocator.isChecked();
-
-        // Perform the appropriate action based on whether the element is checked
-        if (isChecked) {
-            // If checked, uncheck it using the performAction method
-            performAction("uncheck", page, iFrame, iFrame_2, iFrame_3, element, locator, null);
-        } else {
-            System.out.println("Element is not checked");
-        }
-
+    public Locator getElement_locator(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator) {
+        return elementAction.getLocator(iFrame, iFrame_2, iFrame_3, element, locator, page, null);
     }
 
     public void contain(Page page, String iFrame, String element, String locator, String expectedText) {
