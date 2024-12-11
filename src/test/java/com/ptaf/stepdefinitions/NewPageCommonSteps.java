@@ -164,7 +164,7 @@ public class NewPageCommonSteps {
 
     @Then("^we scroll on plad frame (.*?) locator (.*?)$")
     public void weScrollToLocatorOnPladFrame(String element, String locator) {
-        frameCommonMethods.scroll(new_page, plad_frame,null, null, element, locator);
+        frameCommonMethods.scroll(new_page, plad_frame, null, null, element, locator);
     }
 
     @Then("^we clear value on plad frame (.*?) locator (.*?) value \"(.*?)\"$")
@@ -282,27 +282,27 @@ public class NewPageCommonSteps {
 
     @Then("^we verify on pop frame (.*?) of locator (.*?) is checked$")
     public void weVerifyOnPopFrameLocatorIsChecked(String element, String locator) {
-        frameCommonMethods.ischecked(new_page, pop_frame,null, null, element, locator);
+        frameCommonMethods.ischecked(new_page, pop_frame, null, null, element, locator);
     }
 
     @Then("^we verify on pop frame (.*?) of locator (.*?) is enabled")
     public void weVerifyOnPopFrameLocatorIsEnabled(String element, String locator) {
-        frameCommonMethods.isenabled(new_page, pop_frame,null, null, element, locator);
+        frameCommonMethods.isenabled(new_page, pop_frame, null, null, element, locator);
     }
 
     @Then("^we get value on pop frame (.*?) locator (.*?)$")
     public void weGetValueOnPopFrame(String element, String locator) {
-        frameCommonMethods.getvalue(new_page, plad_frame,null, null, element, locator);
+        frameCommonMethods.getvalue(new_page, plad_frame, null, null, element, locator);
     }
 
     @Then("^we verify element has value on pop frame (.*?) of locator (.*?) value \"(.*?)\"$")
     public void weHasValueOnPopFrameLocatorValue(String element, String locator, String value) {
-        frameCommonMethods.hasvalue(new_page, plad_frame,null, null, element, locator, value);
+        frameCommonMethods.hasvalue(new_page, plad_frame, null, null, element, locator, value);
     }
 
     @Then("^we verify on pop frame (.*?) of locator (.*?) is existed")
     public void weVerifyOnPopFrameLocatorIsExisted(String element, String locator) {
-        frameCommonMethods.exists(new_page, plad_frame,null, null, element, locator);
+        frameCommonMethods.exists(new_page, plad_frame, null, null, element, locator);
     }
 
     @Then("^we contain on pop frame (.*?) of locator (.*?) value \"(.*?)\"$")
@@ -312,7 +312,7 @@ public class NewPageCommonSteps {
 
     @Then("^we get text on pop frame(.*?) locator (.*?)$")
     public void weGetTextOnPopFrame(String element, String locator) {
-        frameCommonMethods.gettext(new_page, pop_frame,null, null, element, locator);
+        frameCommonMethods.gettext(new_page, pop_frame, null, null, element, locator);
     }
 
     @And("^we capture screenshot on pop frame (.*?) locator (.*?) name \"(.*?)\"$")
@@ -323,7 +323,7 @@ public class NewPageCommonSteps {
 
     @And("^we press on pop frame (.*?) locator (.*?) key \"(.*?)\" keyboard$")
     public void wePressOnPopFrameKey(String element, String locator, String value) {
-        frameCommonMethods.press(new_page, pop_frame,null, null, element, locator, value);
+        frameCommonMethods.press(new_page, pop_frame, null, null, element, locator, value);
     }
 
 }

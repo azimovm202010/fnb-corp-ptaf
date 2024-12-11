@@ -97,6 +97,8 @@ Feature: Argo_Teller
     When we enter value on second frame general_ledger_page locator cash_amount_flt value "100"
     And we capture screenshot on second frame general_ledger_page locator body name "defects/ADO_6606/debit description field"
     Then we click on second frame general_ledger_page locator ok_btn
+
+  Scenario: Argo_Teller General Ledger failed test Step
     And we wait for some time
     When we click on second frame sessionSummaryPage locator EJ_btn
     And we wait for some time

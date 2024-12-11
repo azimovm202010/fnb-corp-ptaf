@@ -5,7 +5,6 @@ Feature: Second Page Test
     Given we navigate to eStore_QA url
     Then get title of page
 
-  @LastScenario
   Scenario: Apply for FirstRate Savings account from the personal tab
     Given we navigate to eStore_QA url
     Then get title of page

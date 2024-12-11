@@ -42,6 +42,7 @@ public class ElementLocatorHelper {
      * @param locatorValue The full locator value formatted as "LOCATOR_TYPE_LOCATOR".
      * @return The locator type extracted from the locator value.
      */
+
     public String getLocatorType(String locatorValue) {
         // Extract the locator type by splitting the locatorValue at the underscore
         return locatorValue.split("_")[0]; // Example: from "CSS_button" returns "CSS"

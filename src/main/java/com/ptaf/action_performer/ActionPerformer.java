@@ -10,13 +10,14 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Paths;
 
 /**
- * ActionPerformer is a utility class that provides methods to interact with UI elements
- * using Playwright's Locator API. It allows performing different actions on web elements.
+ * ActionPerformer is a utility class that provides methods for interacting with UI elements
+ * using Playwright's Locator API. This class encapsulates various actions that can be
+ * performed on web elements, making it easier to automate user interactions.
  *
  * <h2>Usage:</h2>
  * <ol>
  *     <li>Create an instance of ActionPerformer.</li>
- *     <li>Use the 'performAction' method to execute an action on a specific Locator.</li>
+ *     <li>Use the 'performAction' method to execute a specific action on a Locator.</li>
  *     <li>Call 'waitForLocator' to ensure an element is visible before performing actions on it.</li>
  * </ol>
  *
@@ -33,13 +34,14 @@ public class ActionPerformer {
     private static final Logger logger = LoggerFactory.getLogger(ActionPerformer.class);
 
     /**
-     * Perform the specified action on the given Locator.
+     * Performs the specified action on the given Locator.
      *
-     * @param action        The action to perform (e.g., "click", "fill", "select").
-     * @param targetLocator The target Locator element on which the action will be performed.
-     * @param value         The value for the action (e.g., text to fill in or an attribute to set).
-     *                      For actions like "selectmultiple" or "uploadfile", this value should be formatted accordingly.
-     *                      It can also be null if not required for the action.
+     * @param page          The Playwright Page instance on which the action is performed.
+     * @param action        The action to execute (e.g., "click", "fill", "select").
+     * @param targetLocator The Locator that represents the target UI element.
+     * @param value         The value used for the action, which can vary based on the action type.
+     *                      For example, it can be text to fill an input or an attribute for
+     *                      setting or clearing. It can also be null if not applicable.
      */
     public void performAction(Page page, String action, Locator targetLocator, String value) {
         try {
@@ -48,10 +50,10 @@ public class ActionPerformer {
                     targetLocator.click(); // Clicks the element represented by the Locator
                     break;
                 case "fill":
-                    targetLocator.fill(value); // Fills the input field with the specified value
+                    targetLocator.fill(value); // Fill the input field with the specified value
                     break;
                 case "select":
-                    targetLocator.selectOption(value); // Selects a single option in a dropdown
+                    targetLocator.selectOption(value); // Selects a single option from a dropdown
                     break;
                 case "selectmultiple":
                     targetLocator.selectOption(value.split(",")); // Selects multiple options from a dropdown
@@ -160,7 +162,7 @@ public class ActionPerformer {
                     targetLocator.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.valueOf(value.toUpperCase())));
                     break;
                 case "waitfortext":
-                    // Waits until the specified text is present in the element
+                    // Waits until the specified text is present in the element’s content
                     targetLocator.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
                     if (!targetLocator.textContent().contains(value)) {
                         throw new AssertionError("Text '" + value + "' not found in element.");
@@ -182,7 +184,7 @@ public class ActionPerformer {
                     targetLocator.tap();
                     break;
                 case "uploadfile":
-                    // Uploads a file to the element (input file type)
+                    // Uploads a file to the element (input type='file')
                     targetLocator.setInputFiles(Paths.get(value)); // Assuming value is a file path
                     break;
                 case "dragstart":
@@ -198,10 +200,10 @@ public class ActionPerformer {
                     targetLocator.evaluate("(element, val) => element.value = val", value);
                     break;
                 case "selectfile":
-                    // Similar to uploadfile, but specifically for <input type="file">
+                    // Selects a file to upload, similar to uploadfile but for <input type="file">
                     targetLocator.setInputFiles(Paths.get(value)); // Selects file to upload
                     break;
-                // More Playwright assertions can be added here
+                // More Playwright assertions can be included as required
                 case "hastext":
                     // Asserts that the element contains the specified text
                     String elementText = targetLocator.textContent();
@@ -214,43 +216,48 @@ public class ActionPerformer {
                     assertCondition(hasClass, "Element does not have expected class: " + className);
                     break;
                 case "hasequalvalue":
-                    // Asserts that the element's value is equal to the expected value
+                    // Asserts that the element's value equals the expected value
                     String actualValue = targetLocator.inputValue();
                     assertCondition(actualValue.equals(value), "Element's value is not equal to expected value: " + value);
                     break;
                 case "isempty":
-                    // Asserts that the input is empty
+                    // Asserts that the input field is empty
                     String inputValue = targetLocator.inputValue();
                     assertCondition(inputValue.isEmpty(), "Element is not empty.");
                     break;
                 case "file_chooser_for_upload":
-                    // Wait for a file chooser to be displayed
+                    // Wait for a file chooser to be displayed before invoking the click action
                     page.waitForFileChooser(() -> click(targetLocator)); // Assuming value is not needed here.
                     break;
 
                 default:
-                    throw new IllegalArgumentException("Unknown action: " + action); // Throws error if action is not recognized
+                    throw new IllegalArgumentException("Unknown action: " + action); // Throws an error if action is not recognized
             }
         } catch (Exception e) {
-            // Logs the error and throws a runtime exception
+            // Logs the error and throws a runtime exception if action execution fails
             logger.error("Error while performing action: {} for Target Locator " + targetLocator, e.getMessage());
             throw new RuntimeException("Action failed: for Target Locator " + targetLocator + e.getMessage(), e);
         }
     }
 
+    /**
+     * Clicks the specified Locator while handling exceptions.
+     *
+     * @param targetLocator The Locator that represents the UI element to be clicked.
+     */
     private void click(Locator targetLocator) {
         try {
-            targetLocator.click();
+            targetLocator.click(); // Clicks the specified Locator
         } catch (Exception e) {
             logger.error("Error while clicking on target locator: {}", e.getMessage());
-            throw new RuntimeException("Click action failed: " + e.getMessage(), e);
+            throw new RuntimeException("Click action failed: " + e.getMessage(), e); // Raises error for failed click action
         }
     }
 
     /**
      * Asserts a condition and raises an AssertionError if the condition is false.
      *
-     * @param condition The condition to assert.
+     * @param condition    The condition to evaluate.
      * @param errorMessage The error message to display if the assertion fails.
      */
     private void assertCondition(boolean condition, String errorMessage) {
@@ -260,16 +267,16 @@ public class ActionPerformer {
     }
 
     /**
-     * Waits for a specified Locator to become visible.
+     * Waits for a specified Locator to become visible within a timeout.
      *
      * @param locator The Locator to wait for.
-     *                Will time out after 60 seconds if the element is not visible.
+     *                The method will time out after 60 seconds if the element is not visible.
      */
     public void waitForLocator(Locator locator) {
         try {
             locator.waitFor(new Locator.WaitForOptions()
                     .setState(WaitForSelectorState.VISIBLE) // Wait until the element is visible
-                    .setTimeout(60000)); // 1-minute timeout
+                    .setTimeout(60000)); // Timeout set to 60 seconds
         } catch (Exception e) {
             // Logs the error if waiting for the element fails
             logger.error("Failed to wait for the element to be displayed", e);

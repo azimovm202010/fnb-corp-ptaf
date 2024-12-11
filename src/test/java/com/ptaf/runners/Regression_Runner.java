@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
                 "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:",  // Generate an HTML report in the specified location
                 "timeline:test-output-thread/"
         },
-        tags = "@regression",
+        tags = "@estyle_test",
         // Specify the location of the feature files
         features = "src/test/resources/features",
         // Specify the packages containing the step definitions and hooks

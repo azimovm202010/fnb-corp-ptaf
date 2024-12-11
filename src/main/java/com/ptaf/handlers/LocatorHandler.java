@@ -16,12 +16,13 @@ import com.microsoft.playwright.options.AriaRole;
 public class LocatorHandler {
 
     /**
-     * Gets the locator for a specific type from a Page.
+     * Retrieves the locator for a specific type from a Playwright Page.
      *
      * @param locatorType The type of locator (e.g., XPATH, CSS, BUTTON, etc.).
      * @param page        The Page object where the locator will be searched.
      * @param locator     The locator string or value.
-     * @return The located element as a Locator object.
+     * @return The located element as a Locator object corresponding to the specified type.
+     * @throws IllegalArgumentException if the locator type is unknown.
      */
     public Locator getLocatorForType(String locatorType, Page page, String locator) {
         switch (locatorType.toUpperCase()) {
@@ -34,7 +35,7 @@ public class LocatorHandler {
             case "LINKTEXT":
                 return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName(locator)); // Get link by visible text
             case "OPTION":
-                return page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName(locator).setExact(true)); // Select option with exact name matching
+                return page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName(locator).setExact(true)); // Select option with exact matching
             case "TEXTBOX":
                 return page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName(locator)); // Get textbox by name
             case "CHECKBOX":
@@ -42,7 +43,7 @@ public class LocatorHandler {
             case "RADIOBUTTON":
                 return page.getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName(locator)); // Get radio button by name
             case "DROPDOWN":
-                return page.getByRole(AriaRole.COMBOBOX, new Page.GetByRoleOptions().setName(locator)); // Get dropdown (combo box) by name
+                return page.getByRole(AriaRole.COMBOBOX, new Page.GetByRoleOptions().setName(locator)); // Get dropdown by name
             case "IMAGE":
                 return page.getByRole(AriaRole.IMG, new Page.GetByRoleOptions().setName(locator)); // Get image by name
             case "HEADING":
@@ -153,12 +154,13 @@ public class LocatorHandler {
     }
 
     /**
-     * Gets the locator for a specific type from a FrameLocator.
+     * Retrieves the locator for a specific type from a FrameLocator.
      *
      * @param locatorType The type of locator (e.g., XPATH, CSS, BUTTON, etc.).
      * @param frame       The FrameLocator object where the locator will be searched.
      * @param locator     The locator string or value.
-     * @return The located element as a Locator object.
+     * @return The located element as a Locator object corresponding to the specified type.
+     * @throws IllegalArgumentException if the locator type is unknown.
      */
     public Locator getLocatorForType(String locatorType, FrameLocator frame, String locator) {
         switch (locatorType.toUpperCase()) {
@@ -171,7 +173,7 @@ public class LocatorHandler {
             case "LINKTEXT":
                 return frame.getByRole(AriaRole.LINK, new FrameLocator.GetByRoleOptions().setName(locator)).first(); // Get link by visible text in frame
             case "OPTION":
-                return frame.getByRole(AriaRole.OPTION, new FrameLocator.GetByRoleOptions().setName(locator).setExact(true)); // Select option with exact name match
+                return frame.getByRole(AriaRole.OPTION, new FrameLocator.GetByRoleOptions().setName(locator).setExact(true)); // Select option with exact match in frame
             case "TEXTBOX":
                 return frame.getByRole(AriaRole.TEXTBOX, new FrameLocator.GetByRoleOptions().setName(locator)); // Get textbox by name in frame
             case "CHECKBOX":
@@ -179,7 +181,7 @@ public class LocatorHandler {
             case "RADIOBUTTON":
                 return frame.getByRole(AriaRole.RADIO, new FrameLocator.GetByRoleOptions().setName(locator)); // Get radio button by name in frame
             case "DROPDOWN":
-                return frame.getByRole(AriaRole.COMBOBOX, new FrameLocator.GetByRoleOptions().setName(locator)); // Get dropdown (combo box) by name in frame
+                return frame.getByRole(AriaRole.COMBOBOX, new FrameLocator.GetByRoleOptions().setName(locator)); // Get dropdown by name in frame
             case "IMAGE":
                 return frame.getByRole(AriaRole.IMG, new FrameLocator.GetByRoleOptions().setName(locator)); // Get image by name in frame
             case "HEADING":
@@ -285,47 +287,43 @@ public class LocatorHandler {
             case "CLASS":
                 return frame.locator("." + locator); // Get element by CLASS in frame
             default:
-                throw new IllegalArgumentException("Unknown locator type: " + locatorType); // Handle unknown locator types in frame
+                throw new IllegalArgumentException("Unknown locator type: " + locatorType); // Handle unknown locator types
         }
     }
 
     /**
      * Retrieves a Locator object based on the provided locator type from a given page,
-     * traversing through one to three levels of iFrames.
+     * potentially traversing through one to three levels of iFrames.
      *
      * This method allows for versatile locator retrieval using various types such as
-     * XPATH, CSS, ROLE, and others, while descending through the specified iFrames in the
-     * given order (iFrame, iFrame_2, iFrame_3).
+     * XPATH, CSS, ROLE, and others, while descending through the specified iFrames.
      *
-     * If the specified locator type is valid and recognized, the method returns the
-     * corresponding Locator found either in the context of the provided FrameLocator
-     * or the main page (if the frame is not specified).
+     * If the specified locator type is valid, the method returns the corresponding Locator
+     * found either in the context of the provided FrameLocator or the main page (if provided).
      *
-     * The method has built-in error handling to provide informative messages in case
-     * the locator cannot be found or an invalid locator type is requested.
+     * The method includes error handling to provide informative messages in case
+     * the locator cannot be found or if an invalid locator type is requested.
      *
-     * @param page The main page from which to retrieve locators if the specified frame
-     *             is not provided.
-     * @param iFrame The first level iFrame to search for the locator within.
-     * @param iFrame_2 An optional second level iFrame for deeper search within nested
-     *                  frames.
-     * @param iFrame_3 An optional third level iFrame for additional nested frame searches.
-     * @param locatorType The type of locator to be used (e.g., "BUTTON", "LINKTEXT",
-     *                    "XPATH", etc.).
-     * @param locator The specific identifier for the locator (e.g., an element's name or CSS
-     *                class).
-     * @return The Locator object for the specified type and identification.
-     * @throws IllegalArgumentException if the locator type is unknown or if neither
-     *                                   the page nor the frame can provide a valid Locator.
+     * @param page The main Page to search for locators if the specified frame is not provided.
+     * @param iFrame The first level iFrame locator to search within.
+     * @param iFrame_2 An optional second level iFrame for deeper searches.
+     * @param iFrame_3 An optional third level iFrame for deeper searches.
+     * @param locatorType The type of locator to be retrieved (e.g., "BUTTON", "LINKTEXT", "XPATH", etc.).
+     * @param locator The specific identifier for the locator (e.g., an element's name).
+     * @return The Locator object for the specified type and identifier.
+     * @throws IllegalArgumentException if the locator type is unknown or the Locator cannot be found.
      */
     public Locator getLocatorForTypeFrame(Page page, String iFrame, String iFrame_2, String iFrame_3, String locatorType, String locator) {
         try {
+            // Start with the first iFrame and access its content frame
             FrameLocator frameLocator = page.locator(iFrame).contentFrame();
 
+            // If a second iFrame is specified, navigate deeper
             if (iFrame_2 != null) {
                 frameLocator = frameLocator.locator(iFrame_2).contentFrame();
             }
 
+            // If a third iFrame is specified, navigate deeper
             if (iFrame_3 != null) {
                 frameLocator = frameLocator.locator(iFrame_3).contentFrame();
             }
@@ -336,189 +334,190 @@ public class LocatorHandler {
                 case "XPATH":
                 case "CSS":
                 case "TAG":
-                    return frameLocator.locator(locator);
+                    return frameLocator.locator(locator); // Return Locator using CSS, TAG, or XPATH
 
                 case "BUTTON":
-                    return frameLocator.getByRole(AriaRole.BUTTON, options);
+                    return frameLocator.getByRole(AriaRole.BUTTON, options); // Get button by name in iFrame
 
                 case "LINKTEXT":
-                    return frameLocator.getByRole(AriaRole.LINK, options);
+                    return frameLocator.getByRole(AriaRole.LINK, options); // Get link by visible text in iFrame
 
                 case "OPTION":
-                    return frameLocator.getByRole(AriaRole.OPTION, options);
+                    return frameLocator.getByRole(AriaRole.OPTION, options); // Get option by name in iFrame
 
                 case "TEXTBOX":
-                    return frameLocator.getByRole(AriaRole.TEXTBOX, options);
+                    return frameLocator.getByRole(AriaRole.TEXTBOX, options); // Get textbox by name in iFrame
 
                 case "CHECKBOX":
-                    return frameLocator.getByRole(AriaRole.CHECKBOX, options);
+                    return frameLocator.getByRole(AriaRole.CHECKBOX, options); // Get checkbox by name in iFrame
 
                 case "RADIOBUTTON":
-                    return frameLocator.getByRole(AriaRole.RADIO, options);
+                    return frameLocator.getByRole(AriaRole.RADIO, options); // Get radio button by name in iFrame
 
                 case "DROPDOWN":
-                    return frameLocator.getByRole(AriaRole.COMBOBOX, options);
+                    return frameLocator.getByRole(AriaRole.COMBOBOX, options); // Get dropdown by name in iFrame
 
                 case "IMAGE":
-                    return frameLocator.getByRole(AriaRole.IMG, options);
+                    return frameLocator.getByRole(AriaRole.IMG, options); // Get image by name in iFrame
 
                 case "HEADING":
-                    return frameLocator.getByRole(AriaRole.HEADING, options);
+                    return frameLocator.getByRole(AriaRole.HEADING, options); // Get heading by name in iFrame
 
                 case "TAB":
-                    return frameLocator.getByRole(AriaRole.TAB, options);
+                    return frameLocator.getByRole(AriaRole.TAB, options); // Get tab by name in iFrame
 
                 case "LIST":
-                    return frameLocator.getByRole(AriaRole.LIST, options);
+                    return frameLocator.getByRole(AriaRole.LIST, options); // Get list by name in iFrame
 
                 case "LISTITEM":
-                    return frameLocator.getByRole(AriaRole.LISTITEM, options);
+                    return frameLocator.getByRole(AriaRole.LISTITEM, options); // Get list item by name in iFrame
 
                 case "TABLE":
-                    return frameLocator.getByRole(AriaRole.TABLE, options);
+                    return frameLocator.getByRole(AriaRole.TABLE, options); // Get table by name in iFrame
 
                 case "ROW":
-                    return frameLocator.getByRole(AriaRole.ROW, options);
+                    return frameLocator.getByRole(AriaRole.ROW, options); // Get row by name in iFrame
 
                 case "CELL":
-                    return frameLocator.getByRole(AriaRole.CELL, options);
+                    return frameLocator.getByRole(AriaRole.CELL, options); // Get cell by name in iFrame
 
                 case "SLIDER":
-                    return frameLocator.getByRole(AriaRole.SLIDER, options);
+                    return frameLocator.getByRole(AriaRole.SLIDER, options); // Get slider by name in iFrame
 
                 case "SPINBUTTON":
-                    return frameLocator.getByRole(AriaRole.SPINBUTTON, options);
+                    return frameLocator.getByRole(AriaRole.SPINBUTTON, options); // Get spin button by name in iFrame
 
                 case "PROGRESSBAR":
-                    return frameLocator.getByRole(AriaRole.PROGRESSBAR, options);
+                    return frameLocator.getByRole(AriaRole.PROGRESSBAR, options); // Get progress bar by name in iFrame
 
                 case "ALERT":
-                    return frameLocator.getByRole(AriaRole.ALERT, options);
+                    return frameLocator.getByRole(AriaRole.ALERT, options); // Get alert by name in iFrame
 
                 case "ALERTDIALOG":
-                    return frameLocator.getByRole(AriaRole.ALERTDIALOG, options);
+                    return frameLocator.getByRole(AriaRole.ALERTDIALOG, options); // Get alert dialog by name in iFrame
 
                 case "DIALOG":
-                    return frameLocator.getByRole(AriaRole.DIALOG, options);
+                    return frameLocator.getByRole(AriaRole.DIALOG, options); // Get dialog by name in iFrame
 
                 case "NAVIGATION":
-                    return frameLocator.getByRole(AriaRole.NAVIGATION, options);
+                    return frameLocator.getByRole(AriaRole.NAVIGATION, options); // Get navigation by name in iFrame
 
                 case "MENU":
-                    return frameLocator.getByRole(AriaRole.MENU, options);
+                    return frameLocator.getByRole(AriaRole.MENU, options); // Get menu by name in iFrame
 
                 case "MENUITEM":
-                    return frameLocator.getByRole(AriaRole.MENUITEM, options);
+                    return frameLocator.getByRole(AriaRole.MENUITEM, options); // Get menu item by name in iFrame
 
                 case "MENUITEMCHECKBOX":
-                    return frameLocator.getByRole(AriaRole.MENUITEMCHECKBOX, options);
+                    return frameLocator.getByRole(AriaRole.MENUITEMCHECKBOX, options); // Get menu item with checkbox by name in iFrame
 
                 case "MENUITEMRADIO":
-                    return frameLocator.getByRole(AriaRole.MENUITEMRADIO, options);
+                    return frameLocator.getByRole(AriaRole.MENUITEMRADIO, options); // Get menu item with radio button by name in iFrame
 
                 case "TREE":
-                    return frameLocator.getByRole(AriaRole.TREE, options);
+                    return frameLocator.getByRole(AriaRole.TREE, options); // Get tree structure by name in iFrame
 
                 case "TREEITEM":
-                    return frameLocator.getByRole(AriaRole.TREEITEM, options);
+                    return frameLocator.getByRole(AriaRole.TREEITEM, options); // Get item in tree by name in iFrame
 
                 case "GRID":
-                    return frameLocator.getByRole(AriaRole.GRID, options);
+                    return frameLocator.getByRole(AriaRole.GRID, options); // Get grid by name in iFrame
 
                 case "GRIDCELL":
-                    return frameLocator.getByRole(AriaRole.GRIDCELL, options);
+                    return frameLocator.getByRole(AriaRole.GRIDCELL, options); // Get cell in grid by name in iFrame
 
                 case "SEPARATOR":
-                    return frameLocator.getByRole(AriaRole.SEPARATOR, options);
+                    return frameLocator.getByRole(AriaRole.SEPARATOR, options); // Get separator by name in iFrame
 
                 case "SWITCH":
-                    return frameLocator.getByRole(AriaRole.SWITCH, options);
+                    return frameLocator.getByRole(AriaRole.SWITCH, options); // Get switch by name in iFrame
 
                 case "STATUS":
-                    return frameLocator.getByRole(AriaRole.STATUS, options);
+                    return frameLocator.getByRole(AriaRole.STATUS, options); // Get status by name in iFrame
 
                 case "BANNER":
-                    return frameLocator.getByRole(AriaRole.BANNER, options);
+                    return frameLocator.getByRole(AriaRole.BANNER, options); // Get banner by name in iFrame
 
                 case "FOOTER":
-                    return frameLocator.getByRole(AriaRole.CONTENTINFO, options);
+                    return frameLocator.getByRole(AriaRole.CONTENTINFO, options); // Get footer by name in iFrame
 
                 case "MAIN":
-                    return frameLocator.getByRole(AriaRole.MAIN, options);
+                    return frameLocator.getByRole(AriaRole.MAIN, options); // Get main area by name in iFrame
 
                 case "COMPLEMENTARY":
-                    return frameLocator.getByRole(AriaRole.COMPLEMENTARY, options);
+                    return frameLocator.getByRole(AriaRole.COMPLEMENTARY, options); // Get complementary content in iFrame
 
                 case "REGION":
-                    return frameLocator.getByRole(AriaRole.REGION, options);
+                    return frameLocator.getByRole(AriaRole.REGION, options); // Get region by name in iFrame
 
                 case "ARTICLE":
-                    return frameLocator.getByRole(AriaRole.ARTICLE, options);
+                    return frameLocator.getByRole(AriaRole.ARTICLE, options); // Get article section by name in iFrame
 
                 case "FORM":
-                    return frameLocator.getByRole(AriaRole.FORM, options);
+                    return frameLocator.getByRole(AriaRole.FORM, options); // Get form by name in iFrame
 
                 case "LOG":
-                    return frameLocator.getByRole(AriaRole.LOG, options);
+                    return frameLocator.getByRole(AriaRole.LOG, options); // Get log section by name in iFrame
 
                 case "MARQUEE":
-                    return frameLocator.getByRole(AriaRole.MARQUEE, options);
+                    return frameLocator.getByRole(AriaRole.MARQUEE, options); // Get marquee by name in iFrame
 
                 case "TIMER":
-                    return frameLocator.getByRole(AriaRole.TIMER, options);
+                    return frameLocator.getByRole(AriaRole.TIMER, options); // Get timer by name in iFrame
 
                 case "TOOLTIP":
-                    return frameLocator.getByRole(AriaRole.TOOLTIP, options);
+                    return frameLocator.getByRole(AriaRole.TOOLTIP, options); // Get tooltip by name in iFrame
 
                 case "TOOLBAR":
-                    return frameLocator.getByRole(AriaRole.TOOLBAR, options);
+                    return frameLocator.getByRole(AriaRole.TOOLBAR, options); // Get toolbar by name in iFrame
 
                 case "PRESENTATION":
-                    return frameLocator.getByRole(AriaRole.PRESENTATION, options);
+                    return frameLocator.getByRole(AriaRole.PRESENTATION, options); // Get presentation content in iFrame
 
                 case "FIGURE":
-                    return frameLocator.getByRole(AriaRole.FIGURE, options);
+                    return frameLocator.getByRole(AriaRole.FIGURE, options); // Get figure content in iFrame
 
                 case "CONTENTINFO":
-                    return frameLocator.getByRole(AriaRole.CONTENTINFO, options);
+                    return frameLocator.getByRole(AriaRole.CONTENTINFO, options); // Get content information by name in iFrame
 
                 case "TEXT":
-                    return frameLocator.getByText(locator);
+                    return frameLocator.getByText(locator); // Get element by visible text in iFrame
 
                 case "ROLE":
-                    return frameLocator.getByRole(AriaRole.valueOf(locator));
+                    return frameLocator.getByRole(AriaRole.valueOf(locator)); // Get element by ARIA role in iFrame
 
                 case "ALTTEXT":
-                    return frameLocator.getByAltText(locator);
+                    return frameLocator.getByAltText(locator); // Get by alt text in iFrame
 
                 case "TITLE":
-                    return frameLocator.getByTitle(locator);
+                    return frameLocator.getByTitle(locator); // Get element by title in iFrame
 
                 case "PLACEHOLDER":
-                    return frameLocator.getByPlaceholder(locator);
+                    return frameLocator.getByPlaceholder(locator); // Get element by placeholder in iFrame
 
                 case "LABEL":
-                    return frameLocator.getByLabel(locator);
+                    return frameLocator.getByLabel(locator); // Get element by label in iFrame
 
                 case "TESTID":
-                    return frameLocator.getByTestId(locator);
+                    return frameLocator.getByTestId(locator); // Get element by data-testid in iFrame
 
                 case "ID":
-                    return frameLocator.locator("#" + locator);
+                    return frameLocator.locator("#" + locator); // Get element by ID in iFrame
 
                 case "NAME":
-                    return frameLocator.locator("[name='" + locator + "']");
+                    return frameLocator.locator("[name='" + locator + "']"); // Get element by NAME in iFrame
 
                 case "CLASS":
-                    return frameLocator.locator("." + locator);
+                    return frameLocator.locator("." + locator); // Get element by CLASS in iFrame
 
                 default:
-                    throw new IllegalArgumentException("Unknown locator type for Page: " + locatorType);
+                    throw new IllegalArgumentException("Unknown locator type: " + locatorType); // Handle unknown locator types in iFrame
             }
         } catch (Exception e) {
+            // Handle exceptions and provide feedback if the locator cannot be found
             System.out.println("Locator not found on the page: " + e.getMessage());
         }
 
-        throw new IllegalArgumentException("Locator not found for type: " + locatorType + " with name: " + locator);
+        throw new IllegalArgumentException("Locator not found for type: " + locatorType + " with name: " + locator); // Fallback error
     }
 }
