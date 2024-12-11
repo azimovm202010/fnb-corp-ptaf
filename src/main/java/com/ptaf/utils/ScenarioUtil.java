@@ -63,7 +63,7 @@ public class ScenarioUtil {
 
             // Check if no iframes are provided; in this case, capture a full-page screenshot
             if (iFrame == null) {
-                screenshot = page.screenshot(new Page.ScreenshotOptions().setFullPage(true));
+                screenshot = page.locator(targetLocator).screenshot(new Locator.ScreenshotOptions());
             } else if (iFrame != null && iFrame_2 == null && iFrame_3 == null) {
                 // Capture screenshot from the first specified iframe
                 screenshot = page.frameLocator(iFrame).locator(targetLocator).screenshot(new Locator.ScreenshotOptions());
