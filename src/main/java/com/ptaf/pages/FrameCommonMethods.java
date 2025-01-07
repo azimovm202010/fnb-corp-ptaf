@@ -298,16 +298,50 @@ public class FrameCommonMethods {
 
     /**
      * Checks if the specified element is enabled within nested iframes.
+     * This method delegates the actual check to the performAction method.
      *
-     * @param page     The current Playwright Page.
-     * @param iFrame   The identifier for the outer iframe.
-     * @param iFrame_2 The identifier for the nested iframe.
-     * @param iFrame_3 The identifier for the further nested iframe.
-     * @param element  The logical name of the element to check status.
-     * @param locator  The locator string used to identify the element.
+     * @param page     The current Playwright Page where the element resides.
+     * @param iFrame   The identifier for the outer iframe containing the target element.
+     * @param iFrame_2 The identifier for the second (nested) iframe containing the target element.
+     * @param iFrame_3 The identifier for the third (further nested) iframe containing the target element.
+     * @param element  The logical name of the element to check (for reporting or logging purposes).
+     * @param locator  The locator string used to uniquely identify the element in the DOM.
      */
     public void isenabled(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator) {
-        performAction("isenabled", page, iFrame, iFrame_2, iFrame_3, element, locator, null); // Check if the element is enabled
+        // Delegates the check of element's enabled state within nested iframes to the performAction method
+        performAction("isenabled", page, iFrame, iFrame_2, iFrame_3, element, locator, null);
+    }
+
+    /**
+     * Checks if the specified element is disabled within nested iframes.
+     * This method delegates the actual check to the performAction method.
+     *
+     * @param page     The current Playwright Page where the element resides.
+     * @param iFrame   The identifier for the outer iframe containing the target element.
+     * @param iFrame_2 The identifier for the second (nested) iframe containing the target element.
+     * @param iFrame_3 The identifier for the third (further nested) iframe containing the target element.
+     * @param element  The logical name of the element to check (for reporting or logging purposes).
+     * @param locator  The locator string used to uniquely identify the element in the DOM.
+     */
+    public void isdisabled(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator) {
+        // Delegates the check of element's disabled state within nested iframes to the performAction method
+        performAction("isdisabled", page, iFrame, iFrame_2, iFrame_3, element, locator, null);
+    }
+
+    /**
+     * Checks if the specified element is hidden within nested iframes.
+     * This method delegates the actual check to the performAction method.
+     *
+     * @param page     The current Playwright Page where the element resides.
+     * @param iFrame   The identifier for the outer iframe containing the target element.
+     * @param iFrame_2 The identifier for the second (nested) iframe containing the target element.
+     * @param iFrame_3 The identifier for the third (further nested) iframe containing the target element.
+     * @param element  The logical name of the element to check (for reporting or logging purposes).
+     * @param locator  The locator string used to uniquely identify the element in the DOM.
+     */
+    public void ishidden(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator) {
+        // Delegates the check of element's visibility state (hidden) within nested iframes to the performAction method
+        performAction("ishidden", page, iFrame, iFrame_2, iFrame_3, element, locator, null);
     }
 
     /**

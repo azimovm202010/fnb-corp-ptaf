@@ -144,6 +144,16 @@ public class ActionPerformer {
                     boolean isChecked = targetLocator.isChecked();
                     assertCondition(isChecked, "Element is not checked.");
                     break;
+                case "isdisabled":
+                    // Asserts that a checkbox is checked
+                    boolean isDisabled = targetLocator.isDisabled();
+                    assertCondition(isDisabled, "Element is not disabled.");
+                    break;
+                case "ishidden":
+                    // Asserts that a checkbox is checked
+                    boolean isHidden = targetLocator.isHidden();
+                    assertCondition(isHidden, "Element is not disabled.");
+                    break;
                 case "exists":
                     // Asserts that the element exists in the DOM
                     boolean exists = targetLocator.count() > 0;

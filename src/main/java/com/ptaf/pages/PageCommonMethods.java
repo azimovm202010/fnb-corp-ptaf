@@ -264,14 +264,42 @@ public class PageCommonMethods {
     }
 
     /**
-     * Checks if the given element is enabled.
+     * Checks if the given element is enabled on the current page.
+     * This method uses the performAction method to perform the actual check.
      *
-     * @param page    The current Playwright Page.
-     * @param element The logical name of the element to check.
-     * @param locator The locator string used to identify the element.
+     * @param page    The current Playwright Page where the element resides.
+     * @param element The logical name of the element to check (for logging or reporting purposes).
+     * @param locator The locator string used to identify the element in the DOM.
      */
     public void isenabled(Page page, String element, String locator) {
-        performAction("isenabled", page, element, locator, null); // Delegate enabled check to performAction method
+        // Delegates the check of element's enabled state to the performAction method
+        performAction("isenabled", page, element, locator, null);
+    }
+
+    /**
+     * Checks if the given element is disabled on the current page.
+     * This method uses the performAction method to perform the actual check.
+     *
+     * @param page    The current Playwright Page where the element resides.
+     * @param element The logical name of the element to check (for logging or reporting purposes).
+     * @param locator The locator string used to identify the element in the DOM.
+     */
+    public void isdisabled(Page page, String element, String locator) {
+        // Delegates the check of element's disabled state to the performAction method
+        performAction("isdisabled", page, element, locator, null);
+    }
+
+    /**
+     * Checks if the given element is hidden on the current page.
+     * This method uses the performAction method to perform the actual check.
+     *
+     * @param page    The current Playwright Page where the element resides.
+     * @param element The logical name of the element to check (for logging or reporting purposes).
+     * @param locator The locator string used to identify the element in the DOM.
+     */
+    public void ishidden(Page page, String element, String locator) {
+        // Delegates the check of element's visibility state (hidden) to the performAction method
+        performAction("ishidden", page, element, locator, null);
     }
 
     /**
