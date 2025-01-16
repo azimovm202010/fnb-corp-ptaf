@@ -373,6 +373,20 @@ public class FrameCommonMethods {
     }
 
     /**
+     * Checks if the specified element not_exists within nested iframes.
+     *
+     * @param page     The current Playwright Page.
+     * @param iFrame   The identifier for the outer iframe.
+     * @param iFrame_2 The identifier for the nested iframe.
+     * @param iFrame_3 The identifier for the further nested iframe.
+     * @param element  The logical name of the element to check for existence.
+     * @param locator  The locator string used to identify the element.
+     */
+    public void not_exists(Page page, String iFrame, String iFrame_2, String iFrame_3, String element, String locator) {
+        performAction("not_exists", page, iFrame, iFrame_2, iFrame_3, element, locator, null); // Check for existence of the element
+    }
+
+    /**
      * Right-clicks on a specified element within nested iframes.
      *
      * @param page     The current Playwright Page.

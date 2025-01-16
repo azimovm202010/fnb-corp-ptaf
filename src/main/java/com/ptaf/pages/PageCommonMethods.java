@@ -340,6 +340,17 @@ public class PageCommonMethods {
     }
 
     /**
+     * Checks if the specified element not_exists on the page.
+     *
+     * @param page    The current Playwright Page.
+     * @param element The logical name of the element to check.
+     * @param locator The locator string used to identify the element.
+     */
+    public void not_exists(Page page, String element, String locator) {
+        performAction("not_exists", page, element, locator, null); // Delegate existence check to performAction method
+    }
+
+    /**
      * Right-clicks on the specified element.
      *
      * @param page    The current Playwright Page.

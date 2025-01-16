@@ -159,6 +159,11 @@ public class ActionPerformer {
                     boolean exists = targetLocator.count() > 0;
                     assertCondition(exists, "Element does not exist in the DOM.");
                     break;
+                case "not_exists":
+                    // Asserts that the element does not exist in the DOM
+                    boolean notExists = targetLocator.count() == 0;
+                    assertCondition(notExists, "Element exists in the DOM, but it should not.");
+                    break;
                 case "evaluate":
                     // Evaluates a custom JavaScript expression within the context of the element
                     targetLocator.evaluate(value);
